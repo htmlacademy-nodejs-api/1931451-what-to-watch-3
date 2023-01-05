@@ -1,65 +1,34 @@
-import { readFileSync } from 'fs';
-import { GenreEnum } from '../../types/genre.enum.js';
-import { FilmType } from '../../types/film.type.js';
+import EventEmitter from 'events';
+import { createReadStream } from 'fs';
 import { FileReaderInterface } from './file-reader.interface.js';
 
-export default class TsvFileReader implements FileReaderInterface {
-  private rawData = '';
-
-  constructor (public filename: string) {}
-
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
+export default class TSVFileReader extends EventEmitter implements FileReaderInterface {
+  constructor (public filename: string) {
+    super();
   }
 
-  public toArray(): FilmType[] {
-    if (!this.rawData) {
-      return [];
+  public async read(): Promise<void> {
+    const stream = createReadStream(this.filename, {
+      highWaterMark: 16384,
+      encoding: 'utf-8'
+    });
+
+    let rowRead = '';
+    let endRowPosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chank of stream) {
+      rowRead += chank.toString();
+
+      while ((endRowPosition = rowRead.indexOf('\n')) >= 0) {
+        const completeRow = rowRead.slice(0, endRowPosition + 1);
+        rowRead = rowRead.slice(endRowPosition + 1);
+        importedRowCount++;
+
+        this.emit('row', completeRow);
+      }
     }
 
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim() !== '')
-      .map((line) => line.split('\t'))
-      .map(([
-        name,
-        description,
-        rating,
-        genre,
-        released,
-        runTime,
-        director,
-        starring,
-        posterImage,
-        backgroundImage,
-        backgroundColor,
-        previewVideoLink,
-        videoLink,
-        commentCount,
-        publishDate,
-        username,
-        email,
-        avatarPath
-      ]) => ({
-        name,
-        description,
-        rating: Number.parseFloat(rating),
-        genre: GenreEnum[genre as 'Comedy' | 'Crime' | 'Documentary' | 'Drama' | 'Horror' | 'Family' | 'Romance' | 'Scifi' | 'Thriller'],
-        released: Number.parseInt(released, 10),
-        runTime: Number.parseInt(runTime, 10),
-        director,
-        starring: starring.split(';'),
-        posterImage,
-        backgroundImage,
-        backgroundColor,
-        previewVideoLink,
-        videoLink,
-        commentCount: Number.parseInt(commentCount, 10),
-        publishDate: new Date(publishDate),
-        user: { username, email, avatarPath}
-      }));
+    this.emit('end', importedRowCount);
   }
 }
-
-
-// GenreEnum[type as 'Comedy' | 'Crime' | 'Documentary' | 'Drama' | 'Horror' | 'Family' | 'Romance' | 'Scifi' | 'Thriller']
