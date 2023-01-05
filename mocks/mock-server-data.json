@@ -1,0 +1,145 @@
+{
+  "api": {
+    "name": [
+      "Друзья",
+      "Теория большого взрыва",
+      "Начало",
+      "Индиана Джонс",
+      "Гарри Поттер",
+      "Властелин колец",
+      "Я, робот",
+      "Мгла",
+      "Знакомьтесь, Джо Блэк",
+      "Мерлин",
+      "Десятое королевство",
+      "Звёздные войны"
+    ],
+    "description": [
+      "Страшный рассказ о драконе. Колдовство, предательство и необыкновенный мир фэнтези.",
+      "История про вампиров из маленького городка. Коварство, нестандартный сюжет и необыкновенные приключения священника.",
+      "Идти или остановиться? Вопрос без правильного ответа. Рассказ о долгой и смертельной прогулке.",
+      "Американский ситком, повествующий о жизни шестерых друзей. Признан одним из лучших комедийных сериалов в истории американского телевидения и стал одним из наиболее знаменитых проектов 1990-х годов",
+      "Прими звонок и превратись в зомби. Рассказ о зомбировании через средства связи.",
+      "Виновен или нет? Какая разница. Исход один. Сверхспособности не помогут.",
+      "И у машин есть душа. Хорошо ли это? Мистический рассказ про автомобиль.",
+      "Криминальная сага от неповторимого Марио Пьюзо. Перестрелки, погони, предательство и дружба.",
+      "Мир населяют не только люди. Иные живут вместе с ними и визуально ничем не отличаются. История про магию и могущественных существ. Борьба сил Добра и Зла."
+    ],
+    "director": [
+      "Кристофер Нолан",
+      "Александр Пройас",
+      "Крис Коламбус",
+      "Питер Джексон",
+      "Гор Вербински",
+      "Стив Бэррон",
+      "Джордж Лукас",
+      "Стивен Спилберг"
+    ],
+    "starring": [
+      "Уилл Смит",
+      "Харрисон Форд",
+      "Дэниел Рэдклифф",
+      "Леонардо Дикаприо",
+      "Брэд Питт",
+      "Элайджа Вуд",
+      "Орландо Блум",
+      "Шон Эстин",
+      "Эмма Уотсон",
+      "Руперт Гринт",
+      "Том Фелтон",
+      "Джим Парсонс",
+      "Джонни Галэки",
+      "Мэттью Перри",
+      "Дэвид Швиммер",
+      "Кортни Кокс",
+      "Дженнифер Энистон",
+      "Мэтт Леблан"
+    ],
+    "posterImage": [
+      "friends-poster.jpg",
+      "harry-poster.jpg",
+      "big-bang-poster.jpg",
+      "indiana-poster.jpg",
+      "merlin-poster.jpg",
+      "lord-poster.jpg",
+      "kingdom-poster.jpg",
+      "robot-poster.jpg",
+      "inception-poster.jpg",
+      "star-wars-poster.jpg"
+    ],
+    "backgroundImage": [
+      "friends-bg.jpg",
+      "harry-bg.jpg",
+      "big-bang-bg.jpg",
+      "indiana-bg.jpg",
+      "merlin-bg.jpg",
+      "lord-bg.jpg",
+      "kingdom-bg.jpg",
+      "robot-bg.jpg",
+      "inception-bg.jpg",
+      "star-wars-bg.jpg"
+    ],
+    "backgroundColor": [
+      "#33a555",
+      "#35a52a",
+      "#24a5af",
+      "#15a5da",
+      "#11a5df",
+      "#67a5d2"
+    ],
+    "previewVideoLink": [
+      "friends-trailer.mp4",
+      "harry-trailer.mp4",
+      "big-bang-trailer.mp4",
+      "indiana-trailer.mp4",
+      "merlin-trailer.mp4",
+      "lord-trailer.mp4",
+      "kingdom-trailer.mp4",
+      "robot-trailer.mp4",
+      "inception-trailer.mp4",
+      "star-wars-trailer.mp4"
+    ],
+    "videoLink": [
+      "friends.mp4",
+      "harry.mp4",
+      "big-bang.mp4",
+      "indiana.mp4",
+      "merlin.mp4",
+      "lord.mp4",
+      "kingdom.mp4",
+      "robot.mp4",
+      "inception.mp4",
+      "star-wars.mp4"
+    ],
+    "username": [
+      "Andy Anderson",
+      "Louie Anderson",
+      "Joey Tribbiani",
+      "Rachel Greene",
+      "Phoebe Buffay",
+      "Chandler Bing",
+      "Monica Geller",
+      "Ross Geller"
+    ],
+    "email": [
+      "andy@gmail.com",
+      "louie@gmail.com",
+      "joey221@gmail.com",
+      "rachelgr@gmail.com",
+      "phoebe69@gmail.com",
+      "bingsmile@gmail.com",
+      "monicagel@gmail.com",
+      "doctorross@gmail.com"
+    ],
+    "avatarPath": [
+      "andy.png",
+      "louie.png",
+      "joey.png",
+      "rachel.png",
+      "phoebe.png",
+      "chandler.png",
+      "monica.png",
+      "ross.png"
+    ]
+  }
+}

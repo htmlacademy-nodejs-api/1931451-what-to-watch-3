@@ -22,6 +22,14 @@ npm run compile
 
 Создаст директорию `dist` и скомпилирует проект.
 
+#### Запустить json-server
+
+```bash
+npm run mock:server
+```
+
+Запускает json-server на порту 3123 и json данными из директории ./mocks/mock-server-data.json
+
 #### Удалить скомпилированный проект
 
 ```bash
