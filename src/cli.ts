@@ -14,15 +14,3 @@ myManager.registerCommands([
 myManager.processCommand(process.argv);
 
 // node v18.12.1
-
-// "genre": [
-//     "Comedy",
-//     "Crime",
-//     "Documentary",
-//     "Drama",
-//     "Horror",
-//     "Family",
-//     "Romance",
-//     "Scifi",
-//     "Thriller"
-//   ]
