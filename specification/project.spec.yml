@@ -1,0 +1,577 @@
+openapi: 3.0.0
+info:
+  title: API сервер для проекта «Что посмотреть».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Что посмотреть».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: "1.0.0"
+tags:
+  - name: films
+    description: Действия с фильмами.
+  - name: favorite
+    description: Действия с фильмами «К просмотру».
+  - name: comments
+    description:  Действия с комментариями.
+  - name: users
+    description: Действия с пользователями.
+
+paths:
+  /films/:
+    post:
+      tags:
+        - films
+      summary: Добавление новой карточки с фильмом.
+      description: Добавляет новую карточку с фильмом. Добавлять новые фильмы могут только авторизованные пользователи.
+
+      parameters:
+        - name: X-TOKEN
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            $ref: '#/components/schemas/token'
+
+
+      requestBody:
+        description: Информация для создания новой карточки с фильмом
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createFilm'
+        required: true
+
+      responses:
+        '201':
+          description: Фильм успешно добавлен. Объект с фильмом.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authErrorMessage'
+
+        '409':
+          description: В данных допущена ошибка, объект не создан.
+
+    get:
+      tags:
+       - films
+      summary: Получение списка фильмов
+      description: Получает список фильмом. По умолчанию сервис возвращает не больше 60 фильмов.
+
+      parameters:
+        - name: X-Films-Count
+          in: header
+          description: Пользователь может запросить больше фильмов за раз, указав нужное количество в параметре запроса
+          schema:
+            type: string
+            example: '20'
+
+      responses:
+        '200':
+          description: Операция успешна. Массив фильмов.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/film'
+
+
+  /films/{genre}:
+    get:
+      tags:
+        - films
+      summary: Получение списка фильмов определённого жанра.
+      description: Получает список фильмов определённого жанра. По умолчанию сервис возвращает не больше 60 фильмов.
+
+      parameters:
+        - name: X-Films-Count
+          in: header
+          description: Пользователь может запросить больше фильмов за раз, указав нужное количество в параметре запроса
+          schema:
+            type: string
+            example: '20'
+
+      responses:
+        '200':
+          description: Операция успешна. Массив фильмов с выбранным жанром.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/film'
+
+  /films/{filmId}:
+    get:
+      tags:
+        - films
+      summary: Получение детальной информации фильму.
+      description: Получает детальную информацию по одному фильму.
+
+      parameters:
+        - name: filmId
+          in: path
+          description: Идентификатор фильма
+          required: true
+          schema:
+            type: number
+            example: '20'
+
+      responses:
+        '200':
+          description: Фильм найден. Объект с фильмом.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+
+        '404':
+          description: Фильм не найден
+
+    put:
+      tags:
+        - films
+      summary: Редактирование карточки фильма.
+      description: Редактирует карточку с фильмом. Пользователь может редактировать только «свои» фильмы.
+
+      parameters:
+        - name: filmId
+          in: path
+          description: Идентификатор фильма
+          required: true
+          schema:
+            type: number
+            example: '20'
+
+      requestBody:
+        description: Информация для обновления карточки с фильмом
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createFilm'
+        required: true
+
+      responses:
+        '202':
+          description: Фильм найден и успешно изменен. Обновленный объект с фильмом.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authErrorMessage'
+
+        '403':
+          description: Пользователь не может редактировать чужие фильмы.
+
+        '404':
+          description: Фильм не найден
+
+        '409':
+          description: В новый данных допущена ошибка, объект не изменен.
+
+    delete:
+      tags:
+        - films
+      summary: Удаление карточки фильма.
+      description: Удаляет карточку с фильмом. Пользователь может удалять только «свои» фильмы.
+
+      parameters:
+        - name: filmId
+          in: path
+          description: Идентификатор фильма
+          required: true
+          schema:
+            type: number
+            example: '20'
+
+      responses:
+        '202':
+          description: Фильм найден и успешно удален.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authErrorMessage'
+
+        '403':
+          description: Пользователь не может удалять чужие фильмы.
+
+        '404':
+          description: Фильм не найден
+
+  /films/{filmIdPromo}:
+    get:
+      tags:
+        - films
+      summary: Получение промо-фильма.
+      description: Получает детальную информацию о промо-фильме.
+
+      parameters:
+        - name: filmIdPromo
+          in: path
+          description: Идентификатор фильма
+          required: true
+          schema:
+            type: number
+            example: '20'
+
+      responses:
+        '200':
+          description: Фильм найден.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+
+        '404':
+          description: Фильм не найден
+
+  /comments/{filmId}:
+    post:
+      tags:
+       - comments
+      summary: Добавить новый комментарий к определённому фильму
+      description: Добавляет новый комментарий к определённому фильму. Добавлять комментарии могут только авторизованные клиенты.
+
+      parameters:
+        - name: filmId
+          in: path
+          description: Идентификатор фильма
+          required: true
+          schema:
+            type: number
+            example: '20'
+
+      requestBody:
+        description: Информация для добавления комментария
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addComment'
+        required: true
+
+      responses:
+        '201':
+          description: Комментарий успешно добавлен
+
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authErrorMessage'
+
+        '409':
+          description: В данных допущена ошибка, комментарий не добавлен.
+
+    get:
+      tags:
+        - comments
+      summary: Получить список комментариев для определённого фильма.
+      description: Возвращает список комментариев для определённого фильма. Сервис всегда возвращает список из 50 (или меньше) последних комментариев.
+
+      parameters:
+        - name: filmId
+          in: path
+          description: Идентификатор фильма
+          required: true
+          schema:
+            type: number
+            example: '20'
+
+      responses:
+        '200':
+          description: Список комментариев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/getComments'
+
+        '404':
+          description: Комментарии к данному фильму не найдены
+
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя.
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        '201':
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+
+        '409':
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя.
+      description: Авторизует пользователя на основе логина и пароля.
+
+      requestBody:
+        description: Информация для авторизации пользователя.
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/authUser'
+        required: true
+
+      responses:
+        '202':
+          description: Пользователь ввел верные данные для входа в личный кабинет.
+
+        '400':
+          description: Пользователь ввел неверные данные для входа в личный кабинет.
+
+    get:
+      tags:
+       - users
+      summary: Проверка состояния пользователя.
+      description: Возвращает информацию по авторизованному пользователю.
+
+      responses:
+        '201':
+          description: Объект с информацией о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authErrorMessage'
+
+  /users/logout:
+    delete:
+      tags:
+        - users
+      summary: Завершить сеанс пользователя
+      description: Завершает сеанс работы — выход из закрытой части приложения.
+
+      responses:
+        '202':
+          description: Пользователь вышел из системы
+
+
+components:
+  schemas:
+    createFilm:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Десятое королевство
+        description:
+          type: string
+          example: Американский фэнтезийный мини-сериал о приключениях девушки и её отца в параллельном волшебном мире
+        genre:
+          type: string
+          example: Family
+        released:
+          type: number
+          example: 2000
+        runTime:
+          type: number
+          example: 85
+        director:
+          type: string
+          example: Дэвид Карсон
+        starring:
+          type: array
+          example: [ Кимберли Уильямс, Джон Ларрокетт, Скотт Коэн, Дэниэл Лапэйн, Дайан Уист, Рутгер Хауэр, Роберт Харди ]
+        posterImage:
+          type: string
+          example: kingdom.jpg
+        backgroundImage:
+          type: string
+          example: kingdom-bg.jpg
+        backgroundColor:
+          type: string
+          example: '#35a52a'
+        previewVideoLink:
+          type: string
+          example: kingdom-trailer.mp4
+        videoLink:
+          type: string
+          example: kingdom.mp4
+
+    film:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6229c3d4a04ct1061e6221ea
+        name:
+          type: string
+          example: Десятое королевство
+        description:
+          type: string
+          example: Американский фэнтезийный мини-сериал о приключениях девушки и её отца в параллельном волшебном мире
+        rating:
+          type: number
+          example: 8.6
+        genre:
+          type: string
+          example: Family
+        released:
+          type: number
+          example: 2000
+        runTime:
+          type: number
+          example: 85
+        director:
+          type: string
+          example: Дэвид Карсон
+        starring:
+          type: array
+          example: [ Кимберли Уильямс, Джон Ларрокетт, Скотт Коэн, Дэниэл Лапэйн, Дайан Уист, Рутгер Хауэр, Роберт Харди ]
+        posterImage:
+          type: string
+          example: kingdom.jpg
+        backgroundImage:
+          type: string
+          example: kingdom-bg.jpg
+        backgroundColor:
+          type: string
+          example: '#35a52a'
+        previewVideoLink:
+          type: string
+          example: kingdom-trailer.mp4
+        videoLink:
+          type: string
+          example: kingdom.mp4
+        commentCount:
+          type: number
+          example: 0
+        publishDate:
+          type: string
+          example: '2023-01-16T17:01:18.745Z'
+
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: user@gmail.com
+
+        username:
+          type: string
+          example: myUserName
+
+        password:
+          type: string
+          example: '12345'
+
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6229c3d4a04ct1061e6221ea
+        email:
+          type: string
+          example: user@gmail.com
+        username:
+          type: string
+          example: myUserName
+        avatarPath:
+          type: string
+          example: userAvatar.png
+
+    authUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: user@gmail.com
+
+        password:
+          type: string
+          example: '12345'
+
+    token:
+      type: string
+      example: T2xpdmVyLmNvbn5lckBnbWFpcC5jb20
+
+    authErrorMessage:
+      type: object
+
+      properties:
+        error:
+          type: string
+          example: Нужна авторизация, чтобы пользоваться закрытым разделом страницы
+
+    addComment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Классный фильм!
+        userRating:
+          type: number
+          example: 10
+        userId:
+          type: string
+          example: 6229c3d4a04ct1061e6221ea
+        userEmail:
+          type: string
+          example: user@gmail.com
+
+    getComments:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Классный фильм!
+        userRating:
+          type: number
+          example: 10
