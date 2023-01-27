@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { GenreEnum } from '../types/genre.enum.js';
 import { FilmType } from '../types/film.type.js';
+import mongoose from 'mongoose';
 
 export const createFilm = (row: string) => {
   const tokens = row.replace('\n', '').split('\t');
@@ -51,4 +52,10 @@ export const getErrorMessage = (error: unknown): string =>
 export const createSHA256 = (line: string, salt: string): string => {
   const shaHasher = crypto.createHmac('sha256', salt);
   return shaHasher.update(line).digest('hex');
+};
+
+export const getObjectId = (id: string) => {
+  const ObjectId = mongoose.Types.ObjectId;
+
+  return new ObjectId(id);
 };
