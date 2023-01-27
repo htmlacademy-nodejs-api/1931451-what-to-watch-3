@@ -57,8 +57,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
 
-        '409':
+        '406':
           description: В данных допущена ошибка, объект не создан.
+
+        '409':
+          description: Фильм с таким названием уже существует
 
     get:
       tags:
@@ -137,7 +140,7 @@ paths:
         '404':
           description: Фильм не найден
 
-    put:
+    patch:
       tags:
         - films
       summary: Редактирование карточки фильма.
@@ -181,7 +184,7 @@ paths:
         '404':
           description: Фильм не найден
 
-        '409':
+        '406':
           description: В новый данных допущена ошибка, объект не изменен.
 
     delete:
@@ -282,7 +285,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
 
-        '409':
+        '406':
           description: В данных допущена ошибка, комментарий не добавлен.
 
     get:
@@ -358,7 +361,7 @@ paths:
         '202':
           description: Пользователь ввел верные данные для входа в личный кабинет.
 
-        '400':
+        '409':
           description: Пользователь ввел неверные данные для входа в личный кабинет.
 
     get:

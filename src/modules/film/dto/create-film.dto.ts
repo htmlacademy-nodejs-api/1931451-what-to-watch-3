@@ -14,7 +14,6 @@ export default class CreateFilmDto {
   public backgroundColor!: string;
   public previewVideoLink!: string;
   public videoLink!: string;
-  public commentCount!: number;
   public publishDate!: Date;
   public userId!: string;
 }
