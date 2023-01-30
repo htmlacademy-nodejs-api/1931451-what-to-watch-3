@@ -1,3 +1,54 @@
 GET http://localhost:3123/api HTTP/1.1
 
 ###
+GET http://localhost:3550/films HTTP/1.1
+
+###
+POST http://localhost:3550/films HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Друзья - the best",
+  "description": "Классный сериал",
+  "rating": 9.9,
+  "genre": "Comedy",
+  "released": 1998,
+  "runTime": 25,
+  "director": "Питер Джексон",
+  "starring": [
+    "Мэттью Перри",
+    "Дэвид Швиммер",
+    "Кортни Кокс",
+    "Дженнифер Энистон",
+    "Мэтт Леблан"
+  ],
+  "posterImage": "friends.jpg",
+  "backgroundImage": "friends-bg.jpg",
+  "backgroundColor": "#33a555",
+  "previewVideoLink": "friends-trailer.mp4",
+  "videoLink": "friends.mp4",
+  "publishDate": "2023-01-29T17:01:18.745Z",
+  "userId": "63cd6c09fed3a29241644c95"
+}
+
+###
+POST http://localhost:3550/users/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "testUser",
+  "email": "test@gmail.com",
+  "avatarPath": "avatar.png",
+  "password": "123456"
+}
+
+###
+POST http://localhost:3550/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "test@gmail.com",
+  "password": "123456"
+}
+
+###
