@@ -60,7 +60,7 @@ paths:
         '406':
           description: В данных допущена ошибка, объект не создан.
 
-        '409':
+        '422':
           description: Фильм с таким названием уже существует
 
     get:
@@ -70,12 +70,13 @@ paths:
       description: Получает список фильмом. По умолчанию сервис возвращает не больше 60 фильмов.
 
       parameters:
-        - name: X-Films-Count
-          in: header
-          description: Пользователь может запросить больше фильмов за раз, указав нужное количество в параметре запроса
+        - name: filmCount
+          in: path
+          description: Количество возвращаемых фильмов
           schema:
             type: string
             example: '20'
+          required: true
 
       responses:
         '200':
@@ -96,12 +97,20 @@ paths:
       description: Получает список фильмов определённого жанра. По умолчанию сервис возвращает не больше 60 фильмов.
 
       parameters:
-        - name: X-Films-Count
-          in: header
-          description: Пользователь может запросить больше фильмов за раз, указав нужное количество в параметре запроса
+        - name: filmGenre
+          in: path
+          description: Жанр фильма
+          schema:
+            type: string
+            example: 'Comedy'
+          required: true
+        - name: filmCount
+          in: path
+          description: Количество возвращаемых фильмов
           schema:
             type: string
             example: '20'
+          required: true
 
       responses:
         '200':

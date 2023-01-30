@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { GenreEnum } from '../types/genre.enum.js';
 import { FilmType } from '../types/film.type.js';
 import mongoose from 'mongoose';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 
 export const createFilm = (row: string) => {
   const tokens = row.replace('\n', '').split('\t');
@@ -59,3 +60,10 @@ export const getObjectId = (id: string) => {
 
   return new ObjectId(id);
 };
+
+export const fillDTO = <T, V>(someDto: ClassConstructor<T>, plainObject: V) =>
+  plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
+
+export const createErrorObject = (message: string) => ({
+  error: message
+});
