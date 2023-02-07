@@ -70,13 +70,13 @@ paths:
       description: Получает список фильмом. По умолчанию сервис возвращает не больше 60 фильмов.
 
       parameters:
-        - name: filmCount
-          in: path
+        - name: limit
+          in: query
           description: Количество возвращаемых фильмов
           schema:
             type: string
             example: '20'
-          required: true
+          required: false
 
       responses:
         '200':
@@ -104,13 +104,13 @@ paths:
             type: string
             example: 'Comedy'
           required: true
-        - name: filmCount
-          in: path
+        - name: limit
+          in: query
           description: Количество возвращаемых фильмов
           schema:
             type: string
             example: '20'
-          required: true
+          required: false
 
       responses:
         '200':

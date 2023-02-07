@@ -16,10 +16,10 @@ export default class Application {
     @inject(Component.LoggerInterface) private logger: LoggerInterface,
     @inject(Component.ConfigInterface) private config: ConfigInterface,
     @inject(Component.DatabaseInterface) private databaseClient: DatabaseInterface,
-    @inject(Component.FilmController) private filmController: ControllerInterface,
     @inject(Component.ExceptionFilterInterface) private exceptionFilter: ExceptionFilterInterface,
-    @inject(Component.UserController) private userController: ControllerInterface
-
+    @inject(Component.FilmController) private filmController: ControllerInterface,
+    @inject(Component.UserController) private userController: ControllerInterface,
+    @inject(Component.CommentController) private commentController: ControllerInterface
   ) {
     this.expressApp = express();
   }
@@ -27,9 +27,11 @@ export default class Application {
   public initRoutes() {
     this.expressApp.use('/films', this.filmController.router);
     this.expressApp.use('/users', this.userController.router);
+    this.expressApp.use('/comments', this.commentController.router);
   }
 
   public initMiddleware() {
+    this.expressApp.disable('x-powered-by');
     this.expressApp.use(express.json());
   }
 

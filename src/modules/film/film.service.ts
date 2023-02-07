@@ -54,8 +54,9 @@ export default class FilmService implements FilmServiceInterface {
       .exec();
   }
 
-  public async findByGenre(genre: string, count?: number): Promise<DocumentType<FilmEntity>[]> {
+  public async findByGenre(genreName: string, count?: number): Promise<DocumentType<FilmEntity>[]> {
     const limit = count || DEFAULT_FILM_COUNT;
+    const genre = genreName[0].toUpperCase() + genreName.slice(1);
     return this.filmModel
       .find({genre})
       .sort({createdAt: SortEnum.Down})
