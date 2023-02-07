@@ -1,5 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { GenreEnum } from '../../../types/genre.enum.js';
+import UserResponse from '../../user/response/user.response.js';
 
 export default class FilmResponse {
   @Expose()
@@ -46,4 +47,8 @@ export default class FilmResponse {
 
   @Expose()
   public publishDate!: Date;
+
+  @Expose({ name: 'userId' })
+  @Type(() => UserResponse)
+  public user!: UserResponse;
 }

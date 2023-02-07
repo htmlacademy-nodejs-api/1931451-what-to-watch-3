@@ -20,7 +20,7 @@ export default class CommentService implements CommentServiceInterface {
     return comment.populate(['userId']);
   }
 
-  public async updateFilmRatingAndCommentCount(filmId: string): Promise<DocumentType<CommentEntity>[]> {
+  private async updateFilmRatingAndCommentCount(filmId: string): Promise<DocumentType<CommentEntity>[]> {
     return this.commentModel
       .aggregate([
         { $match: { filmId: getObjectId(filmId) } },
