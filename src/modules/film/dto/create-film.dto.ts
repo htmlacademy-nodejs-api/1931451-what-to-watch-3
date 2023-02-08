@@ -40,12 +40,12 @@ export default class CreateFilmDto {
 
   @IsString({message: 'posterImage is required'})
   @MaxLength(256, {message: 'Too long path for field posterImage'})
-  @Matches(/^[a-zA-Z0-9-_\\/]*[a-z0-9]\.jpg$/, {message: 'The format only “.jpg”. File naming can only be in Latin letters and numbers and from special characters can only be “/_–”'})
+  @Matches(/^[a-zA-Z0-9-_]*[a-z0-9]\.jpg$/, {message: 'The format only “.jpg”. File naming can only be in Latin letters and numbers and from special characters can only be “_–”'})
   public posterImage!: string;
 
   @IsString({message: 'backgroundImage is required'})
   @MaxLength(256, {message: 'Too long path for field backgroundImage'})
-  @Matches(/^[a-zA-Z0-9-_\\/]*[a-z0-9]\.jpg$/, {message: 'The format only “.jpg”. File naming can only be in Latin letters and numbers and from special characters can only be “/_–”'})
+  @Matches(/^[a-zA-Z0-9-_]*[a-z0-9]\.jpg$/, {message: 'The format only “.jpg”. File naming can only be in Latin letters and numbers and from special characters can only be “_–”'})
   public backgroundImage!: string;
 
   @IsHexColor({message: 'backgroundColor is required and must be in hexadecimal'})

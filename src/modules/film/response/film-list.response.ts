@@ -2,7 +2,7 @@ import { Expose, Type } from 'class-transformer';
 import { GenreEnum } from '../../../types/genre.enum.js';
 import UserResponse from '../../user/response/user.response.js';
 
-export default class FilmResponse {
+export default class FilmListResponse {
   @Expose()
   public id!: string;
 
@@ -10,43 +10,16 @@ export default class FilmResponse {
   public name!: string;
 
   @Expose()
-  public description!: string;
-
-  @Expose()
-  public rating!: number;
-
-  @Expose()
-  public commentCount!: number;
-
-  @Expose()
   public genre!: GenreEnum;
-
-  @Expose()
-  public released!: number;
-
-  @Expose()
-  public runTime!: number;
-
-  @Expose()
-  public director!: string;
-
-  @Expose()
-  public starring!: string[];
 
   @Expose()
   public posterImage!: string;
 
   @Expose()
-  public backgroundImage!: string;
-
-  @Expose()
-  public backgroundColor!: string;
-
-  @Expose()
   public previewVideoLink!: string;
 
   @Expose()
-  public videoLink!: string;
+  public commentCount!: number;
 
   @Expose()
   public publishDate!: Date;

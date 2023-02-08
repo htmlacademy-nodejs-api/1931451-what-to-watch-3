@@ -33,6 +33,7 @@ export default class Application {
   public initMiddleware() {
     this.expressApp.disable('x-powered-by');
     this.expressApp.use(express.json());
+    this.expressApp.use('/uploads', express.static(this.config.get('UPLOAD_DIRECTORY')));
   }
 
   public initExceptionFilters() {
