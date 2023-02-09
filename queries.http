@@ -93,4 +93,16 @@ Content-Type: application/json
   "password": "123456"
 }
 
+### Отправка аватарки пользователю
+
+POST http://localhost:3550/users/63cd6c09fed3a29241644c8d/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="snatch.jpg"
+Content-Type: image/jpeg
+
+< /markup/img/snatch.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
 ###

@@ -10,8 +10,8 @@ export default class CreateUserDto {
 
   @IsOptional()
   @MaxLength(256, {message: 'Too long path for field avatarPath'})
-  @Matches(/^[a-zA-Z0-9-_\\/]*[a-z0-9]\.(jpg|png)$/, {message: 'The format may be“.jpg” or «.png». File naming can only be in Latin letters and numbers and from special characters can only be “/_–”'})
-  public avatarPath!: string;
+  @Matches(/^[a-zA-Z0-9-_]*[a-z0-9]\.(jpg|png)$/, {message: 'The format may be“.jpg” or «.png». File naming can only be in Latin letters and numbers and from special characters can only be “_–”'})
+  public avatarPath?: string;
 
   @IsString({message: 'password is required'})
   @Length(6, 12, {message: 'Min length is 6, max is 15'})
