@@ -16,9 +16,10 @@ GET http://localhost:3550/films/63cd6c09fed3a29241644c8f HTTP/1.1
 
 POST http://localhost:3550/films HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
 
 {
-  "name": "Тестовый фильм - 2",
+  "name": "Тестовый фильм - 55",
   "description": "Классный сериал, мне очень понравился.",
   "rating": 0,
   "genre": "Comedy",
@@ -32,27 +33,28 @@ Content-Type: application/json
     "Дженнифер Энистон",
     "Мэтт Леблан"
   ],
-  "posterImage": "img/friends.jpg",
+  "posterImage": "friends.jpg",
   "backgroundImage": "friends-bg.jpg",
   "backgroundColor": "#33a555",
   "previewVideoLink": "friends-trailer.mp4",
   "videoLink": "friends.mp4",
-  "publishDate": "2023-01-29T17:01:18.745Z",
-  "userId": "63cd6c09fed3a29241644c95"
+  "publishDate": "2023-01-29T17:01:18.745Z"
 }
 
 ### Редактировать карточку с фильмом
 
-PATCH http://localhost:3550/films/63d5a7f2714f41335bf0f35b HTTP/1.1
+PATCH http://localhost:3550/films/63cd6c0afed3a29241644dc6 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
 
 {
-  "name": "Друзья - the best"
+  "name": "Мерлин"
 }
 
 ### Удалить карточку с фильмом
 
-DELETE http://localhost:3550/films/63dc4a85684107f361c62f7b HTTP/1.1
+DELETE http://localhost:3550/films/63ed8916a9208a39a16b827d HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZWQ4ZDcxNjhjMWY1MDNiYTcwYzEwYSIsImlhdCI6MTY3NjUxMjYzNSwiZXhwIjoxNjc2Njg1NDM1fQ.U5TIYL0KlHUYMPtunh87jz7mlRAnXPcy90TrXCWZiUo
 
 ### Получить список комментариев к фильму
 
@@ -62,11 +64,11 @@ GET http://localhost:3550/films/63cd6c09fed3a29241644c8f/comments HTTP/1.1
 
 POST http://localhost:3550/comments HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUxMjQwMiwiZXhwIjoxNjc2Njg1MjAyfQ.bA10SXeTsKlNRJmcIUnskwYasYD0sucJpqdikVZCrHE
 
 {
   "commentText": "Неплохо",
-  "userId": "63cd6c09fed3a29241644cbd",
-  "filmId": "63e198a1589f74078b67d9cb",
+  "filmId": "63ed8916a9208a39a16b827d",
   "commentRating": 6,
   "commentDate": "2023-01-29T17:01:18.745Z"
 }
@@ -78,8 +80,8 @@ Content-Type: application/json
 
 {
   "username": "testUser",
-  "email": "test23@gmail.com",
-  "avatarPath": "/img/avatar.png",
+  "email": "test20@gmail.com",
+  "avatarPath": "avatar.png",
   "password": "123456"
 }
 
@@ -89,14 +91,35 @@ POST http://localhost:3550/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "test@gmail.com",
+  "email": "test20@gmail.com",
   "password": "123456"
 }
 
-### Отправка аватарки пользователю
+### Проверка токена пользователя
+
+GET http://localhost:3550/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+
+### Добавить фильм «К просмотру»
+
+POST http://localhost:3550/watchlist HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+
+{
+  "filmId": "63e198a1589f74078b67d9cb"
+}
+
+### Список фильмов «К просмотру»
+
+GET http://localhost:3550/users/63cd6c09fed3a29241644c8d/watchlist HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+
+### Добавление аватарки от пользователя
 
 POST http://localhost:3550/users/63cd6c09fed3a29241644c8d/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="avatar"; filename="snatch.jpg"

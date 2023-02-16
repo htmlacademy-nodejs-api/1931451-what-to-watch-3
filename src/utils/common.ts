@@ -1,3 +1,4 @@
+import * as jose from 'jose';
 import crypto from 'crypto';
 import { GenreEnum } from '../types/genre.enum.js';
 import { FilmType } from '../types/film.type.js';
@@ -70,3 +71,10 @@ export const createErrorObject = (message: string) => ({
 
 export const getCurrentYear = (): number =>
   new Date().getFullYear();
+
+export const createJWT = async (algoritm: string, jwtSecret: string, payload: object): Promise<string> =>
+  new jose.SignJWT({...payload})
+    .setProtectedHeader({ alg: algoritm})
+    .setIssuedAt()
+    .setExpirationTime('2d')
+    .sign(crypto.createSecretKey(jwtSecret, 'utf-8'));

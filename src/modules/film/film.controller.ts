@@ -5,7 +5,9 @@ import { inject, injectable } from 'inversify';
 import { Controller } from '../../common/controller/controller.js';
 import HttpError from '../../common/errors/http-error.js';
 import { LoggerInterface } from '../../common/logger/logger.interface.js';
-import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
+import { CheckUserMiddleware } from '../../common/middlewares/check-user.middleware.js';
+import { DocumentExistsMiddleware } from '../../common/middlewares/document-exists.middleware.js';
+import { PrivateRouteMiddleware } from '../../common/middlewares/private-route.middlewares.js';
 import { ValidateDtoMiddleware } from '../../common/middlewares/validate-dto.middleware.js';
 import { ValidateObjectIdMiddleware } from '../../common/middlewares/validate-objectid.middleware.js';
 import { Component } from '../../types/component.type.js';
@@ -41,7 +43,10 @@ export default class FilmController extends Controller {
       path: '/',
       method: HttpMethodEnum.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateFilmDto)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateFilmDto)
+      ]
     });
     this.addRoute({
       path: '/:filmId',
@@ -57,7 +62,9 @@ export default class FilmController extends Controller {
       method: HttpMethodEnum.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('filmId'),
+        new CheckUserMiddleware(this.filmService, 'Film', 'filmId'),
         new ValidateDtoMiddleware(UpdateFilmDto),
         new DocumentExistsMiddleware(this.filmService, 'Film', 'filmId')
       ]
@@ -67,7 +74,9 @@ export default class FilmController extends Controller {
       method: HttpMethodEnum.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('filmId'),
+        new CheckUserMiddleware(this.filmService, 'Film', 'filmId'),
         new DocumentExistsMiddleware(this.filmService, 'Film', 'filmId')
       ]
     });
@@ -108,9 +117,10 @@ export default class FilmController extends Controller {
   }
 
   public async create(
-    {body}: Request<Record<string, unknown>, Record<string, unknown>, CreateFilmDto>,
+    req: Request<Record<string, unknown>, Record<string, unknown>, CreateFilmDto>,
     res: Response
   ): Promise<void> {
+    const {body, user} = req;
     const existFilm = await this.filmService.findByName(body.name);
 
     if (existFilm) {
@@ -121,7 +131,7 @@ export default class FilmController extends Controller {
       );
     }
 
-    const result = await this.filmService.create(body);
+    const result = await this.filmService.create({...body, userId: user.id});
     const film = await this.filmService.findById(result.id);
     this.created(res, fillDTO(FilmResponse, film));
   }
