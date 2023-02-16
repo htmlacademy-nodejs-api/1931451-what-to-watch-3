@@ -10,46 +10,51 @@ import { Component } from '../../types/component.type.js';
 import { HttpMethodEnum } from '../../types/http-method.enum.js';
 import { fillDTO } from '../../utils/common.js';
 import { FilmServiceInterface } from '../film/film-service.interface.js';
-import { CommentServiceInterface } from './comment-service.interface.js';
-import CreateCommentDto from './dto/create-comment.dto.js';
-import CommentResponse from './response/comment.response.js';
+import CreateWatchlistDto from './dto/create-watchlist.dto.js';
+import WatchlistResponse from './response/watchlist.response.js';
+import { WatchlistServiceInterface } from './watchlist-service.interface.js';
 
 @injectable()
-export default class CommentController extends Controller {
+export default class WatchlistController extends Controller {
   constructor(
     @inject(Component.LoggerInterface) logger: LoggerInterface,
-    @inject(Component.CommentServiceInterface) private readonly commentService: CommentServiceInterface,
+    @inject(Component.WatchlistServiceInterface) private readonly watchlistService: WatchlistServiceInterface,
     @inject(Component.FilmServiceInterface) private readonly filmService: FilmServiceInterface
   ) {
     super(logger);
 
-    this.logger.info('Register routes for CommentController…');
+    this.logger.info('Register routes for WatchlistController…');
     this.addRoute({
       path: '/',
       method: HttpMethodEnum.Post,
-      handler: this.create,
+      handler: this.createOrDelete,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateDtoMiddleware(CreateCommentDto)
+        new ValidateDtoMiddleware(CreateWatchlistDto)
       ]
     });
   }
 
-  public async create(
-    req: Request<object, object, CreateCommentDto>,
+  public async createOrDelete(
+    req: Request<Record<string, unknown>, Record<string, unknown>, CreateWatchlistDto>,
     res: Response
   ): Promise<void> {
-    const {body} = req;
+    const {body, user} = req;
 
     if (!await this.filmService.exists(body.filmId)) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
         `Film with id ${body.filmId} not found.`,
-        'CommentController'
+        'WatchlistController'
       );
     }
 
-    const comment = await this.commentService.create({...body, userId: req.user.id});
-    this.created(res, fillDTO(CommentResponse, comment));
+    if (await this.watchlistService.findByUserIdAndFilmId(user.id, body.filmId)) {
+      this.noContent(res, this.watchlistService.delete(body.filmId));
+      return;
+    }
+
+    const result = await this.watchlistService.create({...body, userId: user.id});
+    this.ok(res, fillDTO(WatchlistResponse, result));
   }
 }

@@ -16,5 +16,5 @@ export default class CommentResponse {
 
   @Expose({name: 'userId'})
   @Type(() => UserResponse)
-  public user!: string;
+  public user!: UserResponse;
 }

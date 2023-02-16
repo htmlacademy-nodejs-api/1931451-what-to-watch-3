@@ -4,7 +4,7 @@ import mime from 'mime-types';
 import { MiddlewareInterface } from '../../types/middleware.interface.js';
 import { nanoid } from 'nanoid';
 
-export default class UploadFileMiddleware implements MiddlewareInterface {
+export class UploadFileMiddleware implements MiddlewareInterface {
   constructor(
     private uploadDirectory: string,
     private fieldName: string

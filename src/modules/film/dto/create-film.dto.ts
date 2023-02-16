@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsEnum, IsHexColor, IsInt, IsMongoId, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, IsHexColor, IsInt, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { GenreEnum } from '../../../types/genre.enum.js';
 import { getCurrentYear } from '../../../utils/common.js';
 
@@ -62,6 +62,5 @@ export default class CreateFilmDto {
   @IsDateString({}, {message: 'publishDate must be valid ISO date'})
   public publishDate!: Date;
 
-  @IsMongoId({message: 'userId field must be valid an id'})
   public userId!: string;
 }
