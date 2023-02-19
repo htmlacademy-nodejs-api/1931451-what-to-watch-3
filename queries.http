@@ -3,10 +3,12 @@ GET http://localhost:3123/api HTTP/1.1
 ### Получить все фильмы
 
 GET http://localhost:3550/films?limit=2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
 
 ### Получить фильмы определённого жанра
 
 GET http://localhost:3550/films/genre/comedy?limit=4 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
 
 ### Получить подробную информацию о фильме
 
@@ -81,7 +83,6 @@ Content-Type: application/json
 {
   "username": "testUser",
   "email": "test20@gmail.com",
-  "avatarPath": "avatar.png",
   "password": "123456"
 }
 
@@ -98,22 +99,22 @@ Content-Type: application/json
 ### Проверка токена пользователя
 
 GET http://localhost:3550/users/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
 
 ### Добавить фильм «К просмотру»
 
 POST http://localhost:3550/watchlist HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
 
 {
-  "filmId": "63e198a1589f74078b67d9cb"
+  "filmId": "63d5a7f2714f41335bf0f35b"
 }
 
 ### Список фильмов «К просмотру»
 
-GET http://localhost:3550/users/63cd6c09fed3a29241644c8d/watchlist HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+GET http://localhost:3550/users/63f15bd18f21a1a708aee62d/watchlist HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
 
 ### Добавление аватарки от пользователя
 

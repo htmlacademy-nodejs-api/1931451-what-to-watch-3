@@ -13,6 +13,9 @@ export type ConfigSchemaType = {
   DB_NAME: string;
   UPLOAD_DIRECTORY: string;
   JWT_SECRET: string;
+  TOKEN_LIFE: string;
+  STATIC_DIRECTORY_PATH: string;
+  HOST: string;
 }
 
 export const configSchema = convict<ConfigSchemaType>({
@@ -69,5 +72,23 @@ export const configSchema = convict<ConfigSchemaType>({
     format: String,
     env: 'JWT_SECRET',
     default: null
+  },
+  TOKEN_LIFE: {
+    doc: 'Data life access token',
+    format: String,
+    env: 'TOKEN_LIFE',
+    default: null
+  },
+  STATIC_DIRECTORY_PATH: {
+    doc: 'Path to directory with static resources',
+    format: String,
+    env: 'STATIC_DIRECTORY_PATH',
+    default: 'static'
+  },
+  HOST: {
+    doc: 'Host where started service',
+    format: String,
+    env: 'HOST',
+    default: 'localhost'
   }
 });

@@ -13,13 +13,23 @@ export default class WatchlistService implements WatchlistServiceInterface {
 
   public async create(dto: CreateWatchlistDto): Promise<DocumentType<WatchlistEntity>> {
     const watchlist = await this.watchlistModel.create(dto);
-    return watchlist.populate(['userId', 'filmId']);
+    return watchlist.populate({
+      path: 'filmId',
+      populate: {
+        path: 'userId'
+      }
+    });
   }
 
   public async findByUserId(userId: string): Promise<DocumentType<WatchlistEntity>[]> {
     return await this.watchlistModel
       .find({userId})
-      .populate(['userId', 'filmId'])
+      .populate({
+        path: 'filmId',
+        populate: {
+          path: 'userId'
+        }
+      })
       .exec();
   }
 

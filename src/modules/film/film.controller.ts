@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as core from 'express-serve-static-core';
 import { StatusCodes } from 'http-status-codes';
 import { inject, injectable } from 'inversify';
+import { ConfigInterface } from '../../common/config/config.interface.js';
 import { Controller } from '../../common/controller/controller.js';
 import HttpError from '../../common/errors/http-error.js';
 import { LoggerInterface } from '../../common/logger/logger.interface.js';
@@ -16,6 +17,7 @@ import { RequestQueryType } from '../../types/request-query.type.js';
 import { fillDTO } from '../../utils/common.js';
 import { CommentServiceInterface } from '../comment/comment-service.interface.js';
 import CommentResponse from '../comment/response/comment.response.js';
+import { WatchlistServiceInterface } from '../watchlist/watchlist-service.interface.js';
 import CreateFilmDto from './dto/create-film.dto.js';
 import UpdateFilmDto from './dto/update-film.dto.js';
 import { FilmServiceInterface } from './film-service.interface.js';
@@ -31,10 +33,12 @@ type ParamsGetFilm = {
 export default class FilmController extends Controller {
   constructor(
     @inject(Component.LoggerInterface) logger: LoggerInterface,
+    @inject(Component.ConfigInterface) configService: ConfigInterface,
     @inject(Component.FilmServiceInterface) private readonly filmService: FilmServiceInterface,
-    @inject(Component.CommentServiceInterface) private readonly commentService: CommentServiceInterface
+    @inject(Component.CommentServiceInterface) private readonly commentService: CommentServiceInterface,
+    @inject(Component.WatchlistServiceInterface) private readonly watchlistService: WatchlistServiceInterface
   ) {
-    super(logger);
+    super(logger, configService);
 
     this.logger.info('Register routes for FilmController…');
 
@@ -101,19 +105,55 @@ export default class FilmController extends Controller {
   }
 
   public async index(
-    {query}: Request<unknown, unknown, unknown, RequestQueryType>,
+    req: Request<unknown, unknown, unknown, RequestQueryType>,
     res: Response
   ): Promise<void> {
+    const {query, user} = req;
     const films = await this.filmService.find(query.limit);
-    this.ok(res, fillDTO(FilmListResponse, films));
+
+    if (!user) {
+      const result = films.map((film) => ({...film.toObject(), isFavorite: false}));
+      this.ok(res, fillDTO(FilmListResponse, result));
+      return;
+    }
+
+    const userWatchlist = await this.watchlistService.findByUserId(user.id);
+    const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
+
+    const result = films.map((film) => (
+      {
+        ...film.toObject(),
+        isFavorite: userWatchlistId.includes(film.id)
+      }
+    ));
+
+    this.ok(res, fillDTO(FilmListResponse, result));
   }
 
   public async getFilmsFromGenre(
-    {params, query}: Request<core.ParamsDictionary | ParamsGetFilm, unknown, unknown, RequestQueryType>,
+    req: Request<core.ParamsDictionary | ParamsGetFilm, unknown, unknown, RequestQueryType>,
     res: Response
   ): Promise<void> {
+    const {params, query, user} = req;
     const films = await this.filmService.findByGenre(params.genre, query.limit);
-    this.ok(res, fillDTO(FilmListResponse, films));
+
+    if (!user) {
+      const result = films.map((film) => ({...film.toObject(), isFavorite: false}));
+      this.ok(res, fillDTO(FilmListResponse, result));
+      return;
+    }
+
+    const userWatchlist = await this.watchlistService.findByUserId(user.id);
+    const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
+
+    const result = films.map((film) => (
+      {
+        ...film.toObject(),
+        isFavorite: userWatchlistId.includes(film.id)
+      }
+    ));
+
+    this.ok(res, fillDTO(FilmListResponse, result));
   }
 
   public async create(

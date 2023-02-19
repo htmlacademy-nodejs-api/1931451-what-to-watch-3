@@ -10,7 +10,7 @@ info:
 tags:
   - name: films
     description: Действия с фильмами.
-  - name: favorite
+  - name: watchlist
     description: Действия с фильмами «К просмотру».
   - name: comments
     description:  Действия с комментариями.
@@ -26,7 +26,7 @@ paths:
       description: Добавляет новую карточку с фильмом. Добавлять новые фильмы могут только авторизованные пользователи.
 
       parameters:
-        - name: X-TOKEN
+        - name: Authorization
           in: header
           description: Авторизационный токен пользователя
           required: true
@@ -35,7 +35,7 @@ paths:
 
 
       requestBody:
-        description: Информация для создания новой карточки с фильмом
+        description: Данные для создания новой карточки с фильмом
         content:
           application/json:
             schema:
@@ -89,7 +89,7 @@ paths:
                  $ref: '#/components/schemas/film'
 
 
-  /films/{genre}:
+  /films/genre/{genre}:
     get:
       tags:
         - films
@@ -97,7 +97,7 @@ paths:
       description: Получает список фильмов определённого жанра. По умолчанию сервис возвращает не больше 60 фильмов.
 
       parameters:
-        - name: filmGenre
+        - name: genre
           in: path
           description: Жанр фильма
           schema:
