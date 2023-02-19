@@ -16,7 +16,7 @@ export abstract class Controller implements ControllerInterface {
 
   constructor(
     protected readonly logger: LoggerInterface,
-    protected readonly config: ConfigInterface
+    protected readonly configService: ConfigInterface
   ) {
     this._router = Router();
   }
@@ -37,11 +37,11 @@ export abstract class Controller implements ControllerInterface {
   }
 
   protected addStaticPath(data: UnknownObjectType): void {
-    const fullServerPath = getFullServerPath(this.config.get('HOST'), this.config.get('PORT'));
+    const fullServerPath = getFullServerPath(this.configService.get('HOST'), this.configService.get('PORT'));
     transformObject(
       STATIC_RESOURCE_FIELDS,
-      `${fullServerPath}/${this.config.get('STATIC_DIRECTORY_PATH')}`,
-      `${fullServerPath}/${this.config.get('UPLOAD_DIRECTORY')}`,
+      `${fullServerPath}/${this.configService.get('STATIC_DIRECTORY_PATH')}`,
+      `${fullServerPath}/${this.configService.get('UPLOAD_DIRECTORY')}`,
       data
     );
   }
