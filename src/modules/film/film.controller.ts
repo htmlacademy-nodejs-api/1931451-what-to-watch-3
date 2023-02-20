@@ -112,7 +112,7 @@ export default class FilmController extends Controller {
     const films = await this.filmService.find(query.limit);
 
     if (!user) {
-      const result = films.map((film) => ({...film.toObject(), isFavorite: false}));
+      const result = films.map((film) => ({...film, isFavorite: false}));
       this.ok(res, fillDTO(FilmListResponse, result));
       return;
     }
@@ -120,12 +120,11 @@ export default class FilmController extends Controller {
     const userWatchlist = await this.watchlistService.findByUserId(user.id);
     const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
 
-    const result = films.map((film) => (
-      {
-        ...film.toObject(),
-        isFavorite: userWatchlistId.includes(film.id)
-      }
-    ));
+    const result = films.map((film) => ({
+      ...film.toObject(),
+      isFavorite: userWatchlistId.includes(film.id),
+      id: film.id,
+    }));
 
     this.ok(res, fillDTO(FilmListResponse, result));
   }
@@ -146,12 +145,11 @@ export default class FilmController extends Controller {
     const userWatchlist = await this.watchlistService.findByUserId(user.id);
     const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
 
-    const result = films.map((film) => (
-      {
-        ...film.toObject(),
-        isFavorite: userWatchlistId.includes(film.id)
-      }
-    ));
+    const result = films.map((film) => ({
+      ...film.toObject(),
+      isFavorite: userWatchlistId.includes(film.id),
+      id: film.id,
+    }));
 
     this.ok(res, fillDTO(FilmListResponse, result));
   }

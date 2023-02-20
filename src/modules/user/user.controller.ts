@@ -153,7 +153,12 @@ export default class UserController extends Controller {
     }
 
     const watchlist = await this.watchlistService.findByUserId(params.userId);
-    const filmList = watchlist.map((film) => ({id: film.toObject().filmId?._id, ...film.toObject().filmId, isFavorite: true}));
+    const filmList = watchlist.map((film) => ({
+      ...film.toObject().filmId,
+      isFavorite: true,
+      id: film.filmId?.id
+    }));
+
     this.ok(res, fillDTO(FilmListResponse, filmList));
   }
 }
