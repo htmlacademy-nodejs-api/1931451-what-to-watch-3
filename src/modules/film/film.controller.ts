@@ -23,10 +23,15 @@ import UpdateFilmDto from './dto/update-film.dto.js';
 import { FilmServiceInterface } from './film-service.interface.js';
 import FilmListResponse from './response/film-list.response.js';
 import FilmResponse from './response/film.response.js';
+import { FilmEntity } from './film.entity.js';
 
 type ParamsGetFilm = {
   filmId: string;
   genre: string;
+}
+
+interface FilmObjectInterface extends FilmEntity {
+  toObject(): object;
 }
 
 @injectable()
@@ -94,6 +99,7 @@ export default class FilmController extends Controller {
       ]
     });
     this.addRoute({path: '/genre/:genre', method: HttpMethodEnum.Get, handler: this.getFilmsFromGenre });
+    this.addRoute({path: '/promo', method: HttpMethodEnum.Get, handler: this.getPromoFilm });
   }
 
   public async show(
@@ -108,36 +114,30 @@ export default class FilmController extends Controller {
     req: Request<unknown, unknown, unknown, RequestQueryType>,
     res: Response
   ): Promise<void> {
-    const {query, user} = req;
+    const {query} = req;
     const films = await this.filmService.find(query.limit);
 
-    if (!user) {
-      const result = films.map((film) => ({...film, isFavorite: false}));
-      this.ok(res, fillDTO(FilmListResponse, result));
-      return;
-    }
-
-    const userWatchlist = await this.watchlistService.findByUserId(user.id);
-    const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
-
-    const result = films.map((film) => ({
-      ...film.toObject(),
-      isFavorite: userWatchlistId.includes(film.id),
-      id: film.id,
-    }));
-
-    this.ok(res, fillDTO(FilmListResponse, result));
+    this.setWatchlist(req, res, films);
   }
 
   public async getFilmsFromGenre(
     req: Request<core.ParamsDictionary | ParamsGetFilm, unknown, unknown, RequestQueryType>,
     res: Response
   ): Promise<void> {
-    const {params, query, user} = req;
+    const {params, query} = req;
     const films = await this.filmService.findByGenre(params.genre, query.limit);
 
+    this.setWatchlist(req, res, films);
+  }
+
+  private async setWatchlist(
+    {user}: Request<unknown, unknown, unknown, RequestQueryType>,
+    res: Response,
+    films: FilmObjectInterface[]
+  ): Promise<void> {
+
     if (!user) {
-      const result = films.map((film) => ({...film.toObject(), isFavorite: false}));
+      const result = films.map((film: FilmObjectInterface) => ({...film, isFavorite: false}));
       this.ok(res, fillDTO(FilmListResponse, result));
       return;
     }
@@ -145,7 +145,7 @@ export default class FilmController extends Controller {
     const userWatchlist = await this.watchlistService.findByUserId(user.id);
     const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
 
-    const result = films.map((film) => ({
+    const result = films.map((film: FilmObjectInterface) => ({
       ...film.toObject(),
       isFavorite: userWatchlistId.includes(film.id),
       id: film.id,
@@ -200,5 +200,19 @@ export default class FilmController extends Controller {
   ): Promise<void> {
     const comments = await this.commentService.findByFilmId(params.filmId);
     this.ok(res, fillDTO(CommentResponse, comments));
+  }
+
+  public async getPromoFilm(_req: Request, res: Response): Promise<void> {
+    const promoFilm = await this.filmService.findPromoFilm();
+
+    if (!promoFilm) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        'Promo film not found',
+        'FilmController'
+      );
+    }
+
+    this.ok(res, fillDTO(FilmResponse, promoFilm));
   }
 }

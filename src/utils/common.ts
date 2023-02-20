@@ -10,6 +10,8 @@ import { ServiceErrorEnum } from '../types/service-error.enum.js';
 import { UnknownObjectType } from '../types/unknown-object.type.js';
 import { DEFAULT_STATIC_IMAGES } from '../app/application.constant.js';
 
+type GenresType = 'Comedy' | 'Crime' | 'Documentary' | 'Drama' | 'Horror' | 'Family' | 'Romance' | 'Scifi' | 'Thriller';
+
 export const createFilm = (row: string) => {
   const tokens = row.replace('\n', '').split('\t');
   const [
@@ -37,7 +39,7 @@ export const createFilm = (row: string) => {
     name,
     description,
     rating: Number.parseFloat(rating),
-    genre: GenreEnum[genre as 'Comedy' | 'Crime' | 'Documentary' | 'Drama' | 'Horror' | 'Family' | 'Romance' | 'Scifi' | 'Thriller'],
+    genre: GenreEnum[genre as GenresType],
     released: Number.parseInt(released, 10),
     runTime: Number.parseInt(runTime, 10),
     director,

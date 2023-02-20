@@ -1,14 +1,20 @@
+@token=eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3NjkyOTk5NywiZXhwIjoxNjc3MTAyNzk3fQ.2HRT7JCNvUrrw3Jnizu5tQZLDwtQcpBeykUUvF0xq7s
+
 GET http://localhost:3123/api HTTP/1.1
 
 ### Получить все фильмы
 
 GET http://localhost:3550/films?limit=2 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
+Authorization: Bearer {{token}}
 
 ### Получить фильмы определённого жанра
 
 GET http://localhost:3550/films/genre/comedy?limit=4 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
+Authorization: Bearer {{token}}
+
+### Получить промо фильм
+
+GET http://localhost:3550/promo HTTP/1.1
 
 ### Получить подробную информацию о фильме
 
@@ -18,7 +24,7 @@ GET http://localhost:3550/films/63cd6c09fed3a29241644c8f HTTP/1.1
 
 POST http://localhost:3550/films HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+Authorization: Bearer {{token}}
 
 {
   "name": "Тестовый фильм - 55",
@@ -47,7 +53,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iL
 
 PATCH http://localhost:3550/films/63cd6c0afed3a29241644dc6 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+Authorization: Bearer {{token}}
 
 {
   "name": "Мерлин"
@@ -56,7 +62,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iL
 ### Удалить карточку с фильмом
 
 DELETE http://localhost:3550/films/63ed8916a9208a39a16b827d HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZWQ4ZDcxNjhjMWY1MDNiYTcwYzEwYSIsImlhdCI6MTY3NjUxMjYzNSwiZXhwIjoxNjc2Njg1NDM1fQ.U5TIYL0KlHUYMPtunh87jz7mlRAnXPcy90TrXCWZiUo
+Authorization: Bearer {{token}}
 
 ### Получить список комментариев к фильму
 
@@ -66,11 +72,11 @@ GET http://localhost:3550/films/63cd6c09fed3a29241644c8f/comments HTTP/1.1
 
 POST http://localhost:3550/comments HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUxMjQwMiwiZXhwIjoxNjc2Njg1MjAyfQ.bA10SXeTsKlNRJmcIUnskwYasYD0sucJpqdikVZCrHE
+Authorization: Bearer {{token}}
 
 {
   "commentText": "Неплохо",
-  "filmId": "63ed8916a9208a39a16b827d",
+  "filmId": "63d5a7f2714f41335bf0f35b",
   "commentRating": 6,
   "commentDate": "2023-01-29T17:01:18.745Z"
 }
@@ -82,7 +88,7 @@ Content-Type: application/json
 
 {
   "username": "testUser",
-  "email": "test20@gmail.com",
+  "email": "test226@gmail.com",
   "password": "123456"
 }
 
@@ -99,13 +105,13 @@ Content-Type: application/json
 ### Проверка токена пользователя
 
 GET http://localhost:3550/users/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
+Authorization: Bearer {{token}}
 
 ### Добавить фильм «К просмотру»
 
 POST http://localhost:3550/watchlist HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
+Authorization: Bearer {{token}}
 
 {
   "filmId": "63d5a7f2714f41335bf0f35b"
@@ -114,13 +120,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iL
 ### Список фильмов «К просмотру»
 
 GET http://localhost:3550/users/63f15bd18f21a1a708aee62d/watchlist HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3Njc2MjExNCwiZXhwIjoxNjc2OTM0OTE0fQ.goBdSpBM-dI551GzyDOkbRqCGyEkqEx2SBCAJ1LTTfw
+Authorization: Bearer {{token}}
 
 ### Добавление аватарки от пользователя
 
 POST http://localhost:3550/users/63cd6c09fed3a29241644c8d/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyNUBnbWFpbC5jb20iLCJpZCI6IjYzZTZiYThiYmI2NWE1YjZiZjljMTdhYyIsImlhdCI6MTY3NjUwMzczMCwiZXhwIjoxNjc2Njc2NTMwfQ.6kmWEEhMLnG21kKasuxU5YnoMos0-Mp0nqosrUwO-50
+Authorization: Bearer {{token}}
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="avatar"; filename="snatch.jpg"

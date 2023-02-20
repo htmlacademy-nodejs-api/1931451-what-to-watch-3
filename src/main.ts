@@ -22,5 +22,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-// node v18.12.1

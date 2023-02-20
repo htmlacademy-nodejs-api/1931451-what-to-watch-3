@@ -25,7 +25,7 @@ export abstract class Controller implements ControllerInterface {
     return this._router;
   }
 
-  addRoute(route: RouteInterface): void {
+  public addRoute(route: RouteInterface): void {
     const routeHandler = asyncHandler(route.handler.bind(this));
     const middlewares = route.middlewares?.map(
       (middleware) => asyncHandler(middleware.execute.bind(middleware))
@@ -46,22 +46,23 @@ export abstract class Controller implements ControllerInterface {
     );
   }
 
-  send<T>(res: Response, statusCode: number, data: T): void {
+  public send<T>(res: Response, statusCode: number, data: T): void {
+    this.addStaticPath(data as UnknownObjectType);
     res
       .type('application/json')
       .status(statusCode)
       .json(data);
   }
 
-  ok<T>(res: Response, data: T): void {
+  public ok<T>(res: Response, data: T): void {
     this.send(res, StatusCodes.OK, data);
   }
 
-  created<T>(res: Response, data: T): void {
+  public created<T>(res: Response, data: T): void {
     this.send(res, StatusCodes.CREATED, data);
   }
 
-  noContent<T>(res: Response, data: T): void {
+  public noContent<T>(res: Response, data: T): void {
     this.send(res, StatusCodes.NO_CONTENT, data);
   }
 }

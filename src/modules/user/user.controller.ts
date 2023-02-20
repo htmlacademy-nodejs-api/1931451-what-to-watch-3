@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import * as core from 'express-serve-static-core';
 import { StatusCodes } from 'http-status-codes';
@@ -80,8 +79,16 @@ export default class UserController extends Controller {
     req: Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>,
     res: Response
   ): Promise<void> {
-    const { body } = req;
+    const { body, user } = req;
     const existsUser = await this.userService.findByEmail(body.email);
+
+    if (user) {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        'Only anonymous users can create an account.',
+        'UserController'
+      );
+    }
 
     if (existsUser) {
       throw new HttpError(

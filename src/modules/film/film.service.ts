@@ -65,6 +65,13 @@ export default class FilmService implements FilmServiceInterface {
       .exec();
   }
 
+  public async findPromoFilm(): Promise<DocumentType<FilmEntity> | null> {
+    return this.filmModel
+      .findOne({isPromo: true})
+      .populate(['userId'])
+      .exec();
+  }
+
   public async updateById(filmId: string, dto: UpdateFilmDto): Promise<DocumentType<FilmEntity> | null> {
     return this.filmModel
       .findByIdAndUpdate(filmId, dto, {new: true})

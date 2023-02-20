@@ -1,8 +1,9 @@
 import { IsMongoId } from 'class-validator';
+import { WatchlistValidationEnum } from '../../../types/validation.enum.js';
 
 export default class CreateWatchlistDto {
   public userId!: string;
 
-  @IsMongoId({message: 'filmId field must be a valid id'})
+  @IsMongoId({message: WatchlistValidationEnum.FilmId.IsMongoId})
   public filmId!: string;
 }

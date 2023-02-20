@@ -13,5 +13,3 @@ myManager.registerCommands([
   new ImportCommand, new GenerateCommand
 ]);
 myManager.processCommand(process.argv);
-
-// node v18.12.1

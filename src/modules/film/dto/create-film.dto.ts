@@ -1,65 +1,67 @@
 import { IsArray, IsDateString, IsEnum, IsHexColor, IsInt, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { GenreEnum } from '../../../types/genre.enum.js';
-import { getCurrentYear } from '../../../utils/common.js';
+import { FilmValidationEnum } from '../../../types/validation.enum.js';
 
 export default class CreateFilmDto {
-  @IsString({message: 'name is required'})
-  @MinLength(5, {message: 'Minimum name length must be 5'})
-  @MaxLength(100, {message: 'Maximum name length must be 100'})
+  @IsString({message: FilmValidationEnum.Name.IsString})
+  @MinLength(FilmValidationEnum.Name.MinLength.Value, {message: FilmValidationEnum.Name.MinLength.Message})
+  @MaxLength(FilmValidationEnum.Name.MaxLength.Value, {message: FilmValidationEnum.Name.MaxLength.Message})
   public name!: string;
 
-  @IsString({message: 'description is required'})
-  @MinLength(20, {message: 'Minimum description length must be 20'})
-  @MaxLength(1024, {message: 'Maximum description length must be 1024'})
+  @IsString({message: FilmValidationEnum.Description.IsString})
+  @MinLength(FilmValidationEnum.Description.MinLength.Value, {message: FilmValidationEnum.Description.MinLength.Message})
+  @MaxLength(FilmValidationEnum.Description.MaxLength.Value, {message: FilmValidationEnum.Description.MaxLength.Message})
   public description!: string;
 
-  @IsInt({message: 'rating must be an integer'})
-  @Max(0, {message: 'Rating after creation cannot be more than 0'})
+  @IsInt({message: FilmValidationEnum.Rating.IsInt})
+  @Max(FilmValidationEnum.Rating.Max.Value, {message: FilmValidationEnum.Rating.Max.Message})
   public rating!: number;
 
-  @IsEnum(GenreEnum ,{message: 'genre must be Comedy, Crime, Documentary, Drama, Horror, Family, Romance, Scifi or Thriller'})
+  @IsEnum(GenreEnum ,{message: FilmValidationEnum.Genre.IsEnum})
   public genre!: GenreEnum;
 
-  @IsInt({message: 'released must be an integer'})
-  @Min(1895, {message: 'There were no films before 1895'})
-  @Max(getCurrentYear(), {message: 'Unfortunately we can\'t add movies from the future'})
+  @IsInt({message: FilmValidationEnum.Released.IsInt})
+  @Min(FilmValidationEnum.Released.Min.Value, {message: FilmValidationEnum.Released.Min.Message})
+  @Max(FilmValidationEnum.Released.Max.Value, {message: FilmValidationEnum.Released.Max.Message})
   public released!: number;
 
-  @IsInt({message: 'runTime must be an integer'})
-  @Min(1, {message: 'The film must be at least 1 minute long'})
-  @Max(240, {message: 'Sorry, we can\'t post a movie longer than 4 hours'})
+  @IsInt({message: FilmValidationEnum.RunTime.IsInt})
+  @Min(FilmValidationEnum.RunTime.Min.Value, {message: FilmValidationEnum.RunTime.Min.Message})
+  @Max(FilmValidationEnum.RunTime.Max.Value, {message: FilmValidationEnum.RunTime.Max.Message})
   public runTime!: number;
 
-  @IsString({message: 'director is required'})
-  @MinLength(2, {message: 'Minimum name director length must be 2'})
-  @MaxLength(50, {message: 'Maximum name director length must be 50'})
+  @IsString({message: FilmValidationEnum.Director.IsString})
+  @MinLength(FilmValidationEnum.Director.MinLength.Value, {message: FilmValidationEnum.Director.MinLength.Message})
+  @MaxLength(FilmValidationEnum.Director.MaxLength.Value, {message: FilmValidationEnum.Director.MaxLength.Message})
   public director!: string;
 
-  @IsArray({message: 'Field starring must be an array'})
+  @IsArray({message: FilmValidationEnum.Starring.IsArray})
   public starring!: string[];
 
-  @IsString({message: 'posterImage is required'})
-  @MaxLength(256, {message: 'Too long path for field posterImage'})
-  @Matches(/^[a-zA-Z0-9-_]*[a-z0-9]\.jpg$/, {message: 'The format only “.jpg”. File naming can only be in Latin letters and numbers and from special characters can only be “_–”'})
+  @IsString({message: FilmValidationEnum.PosterImage.IsString})
+  @MaxLength(FilmValidationEnum.PosterImage.MaxLength.Value, {message: FilmValidationEnum.PosterImage.MaxLength.Message})
+  @Matches(FilmValidationEnum.PosterImage.Matches.Value, {message: FilmValidationEnum.PosterImage.Matches.Message})
   public posterImage!: string;
 
-  @IsString({message: 'backgroundImage is required'})
-  @MaxLength(256, {message: 'Too long path for field backgroundImage'})
-  @Matches(/^[a-zA-Z0-9-_]*[a-z0-9]\.jpg$/, {message: 'The format only “.jpg”. File naming can only be in Latin letters and numbers and from special characters can only be “_–”'})
+  @IsString({message: FilmValidationEnum.BackgroundImage.IsString})
+  @MaxLength(FilmValidationEnum.BackgroundImage.MaxLength.Value, {message: FilmValidationEnum.BackgroundImage.MaxLength.Message})
+  @Matches(FilmValidationEnum.BackgroundImage.Matches.Value, {message: FilmValidationEnum.BackgroundImage.Matches.Message})
   public backgroundImage!: string;
 
-  @IsHexColor({message: 'backgroundColor is required and must be in hexadecimal'})
+  @IsHexColor({message: FilmValidationEnum.BackgroundColor.IsHexColor})
   public backgroundColor!: string;
 
-  @IsString({message: 'previewVideoLink is required'})
-  @MaxLength(256, {message: 'Too long path for field previewVideoLink'})
+  @IsString({message: FilmValidationEnum.PreviewVideoLink.IsString})
+  @MaxLength(FilmValidationEnum.PreviewVideoLink.MaxLength.Value, {message: FilmValidationEnum.PreviewVideoLink.MaxLength.Message})
+  @Matches(FilmValidationEnum.PreviewVideoLink.Matches.Value, {message: FilmValidationEnum.PreviewVideoLink.Matches.Message})
   public previewVideoLink!: string;
 
-  @IsString({message: 'videoLink is required'})
-  @MaxLength(256, {message: 'Too long path for field videoLink'})
+  @IsString({message: FilmValidationEnum.VideoLink.IsString})
+  @MaxLength(FilmValidationEnum.VideoLink.MaxLength.Value, {message: FilmValidationEnum.VideoLink.MaxLength.Message})
+  @Matches(FilmValidationEnum.VideoLink.Matches.Value, {message: FilmValidationEnum.VideoLink.Matches.Message})
   public videoLink!: string;
 
-  @IsDateString({}, {message: 'publishDate must be valid ISO date'})
+  @IsDateString({}, {message: FilmValidationEnum.PublishDate.IsDateString})
   public publishDate!: Date;
 
   public userId!: string;

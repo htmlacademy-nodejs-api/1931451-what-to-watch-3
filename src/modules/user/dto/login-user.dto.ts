@@ -1,9 +1,10 @@
 import { IsEmail, IsString } from 'class-validator';
+import { UserValidationEnum } from '../../../types/validation.enum.js';
 
 export default class LoginUserDto {
-  @IsEmail({}, {message: 'email must be a valid address'})
+  @IsEmail({}, {message: UserValidationEnum.Email.IsEmail})
   public email!: string;
 
-  @IsString({message: 'password is required'})
+  @IsString({message: UserValidationEnum.Password.IsString})
   public password!: string;
 }

@@ -1,20 +1,21 @@
 import { IsDateString, IsInt, IsMongoId, IsString, Length, Max, Min } from 'class-validator';
+import { CommentValidationEnum } from '../../../types/validation.enum.js';
 
 export default class CreateCommentDto {
-  @IsString({message: 'commentText is required'})
-  @Length(5, 1024, {message: 'Min length is 5, max is 1024'})
+  @IsString({message: CommentValidationEnum.CommentText.IsString})
+  @Length(CommentValidationEnum.CommentText.MinLengthValue, CommentValidationEnum.CommentText.MaxLengthValue, {message: CommentValidationEnum.CommentText.LengthMessage})
   public commentText!: string;
 
   public userId!: string;
 
-  @IsMongoId({message: 'filmId field must be a valid id'})
+  @IsMongoId({message: CommentValidationEnum.FilmId.IsMongoId})
   public filmId!: string;
 
-  @IsInt({message: 'commentRating must be an integer'})
-  @Min(1, {message: 'Minimum value 1'})
-  @Max(10, {message: 'Maximum value 10'})
+  @IsInt({message: CommentValidationEnum.CommentRating.IsInt})
+  @Min(CommentValidationEnum.CommentRating.Min.Value, {message: CommentValidationEnum.CommentRating.Min.Message})
+  @Max(CommentValidationEnum.CommentRating.Max.Value, {message: CommentValidationEnum.CommentRating.Max.Message})
   public commentRating!: number;
 
-  @IsDateString({}, {message: 'commentDate must be valid ISO date'})
+  @IsDateString({}, {message: CommentValidationEnum.commentDate.IsDateString})
   public commentDate!: Date;
 }

@@ -16,6 +16,8 @@ tags:
     description:  Действия с комментариями.
   - name: users
     description: Действия с пользователями.
+  - name: promo
+    description: Действия с промо фильмом.
 
 paths:
   /films/:
@@ -50,15 +52,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/film'
 
+        '400':
+          description: В данных допущена ошибка, объект не создан.
+
         '401':
           description: Пользователь не авторизован
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
-
-        '406':
-          description: В данных допущена ошибка, объект не создан.
 
         '422':
           description: Фильм с таким названием уже существует
@@ -75,7 +77,7 @@ paths:
           description: Количество возвращаемых фильмов
           schema:
             type: string
-            example: '20'
+            example: '?limit=20'
           required: false
 
       responses:
@@ -87,7 +89,6 @@ paths:
                 type: array
                 items:
                  $ref: '#/components/schemas/film'
-
 
   /films/genre/{genre}:
     get:
@@ -109,7 +110,7 @@ paths:
           description: Количество возвращаемых фильмов
           schema:
             type: string
-            example: '20'
+            example: '?limit=20'
           required: false
 
       responses:
@@ -136,7 +137,7 @@ paths:
           required: true
           schema:
             type: number
-            example: '20'
+            example: '63cd6c09fed3a29241644c8f'
 
       responses:
         '200':
@@ -145,6 +146,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/film'
+
+        '400':
+          description: Указан неверный идентификатор
 
         '404':
           description: Фильм не найден
@@ -162,7 +166,7 @@ paths:
           required: true
           schema:
             type: number
-            example: '20'
+            example: '63cd6c09fed3a29241644c8f'
 
       requestBody:
         description: Информация для обновления карточки с фильмом
@@ -173,12 +177,15 @@ paths:
         required: true
 
       responses:
-        '202':
+        '201':
           description: Фильм найден и успешно изменен. Обновленный объект с фильмом.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/film'
+
+        '400':
+          description: Указан неверный идентификатор или в новый данных допущена ошибка
 
         '401':
           description: Пользователь не авторизован
@@ -187,14 +194,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
 
-        '403':
-          description: Пользователь не может редактировать чужие фильмы.
-
         '404':
           description: Фильм не найден
 
-        '406':
-          description: В новый данных допущена ошибка, объект не изменен.
+        '409':
+          description: Пользователь не может редактировать чужие фильмы.
 
     delete:
       tags:
@@ -212,7 +216,7 @@ paths:
             example: '20'
 
       responses:
-        '202':
+        '204':
           description: Фильм найден и успешно удален.
           content:
             application/json:
@@ -226,27 +230,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
 
-        '403':
-          description: Пользователь не может удалять чужие фильмы.
-
         '404':
           description: Фильм не найден
 
-  /films/{filmIdPromo}:
+        '409':
+          description: Пользователь не может удалять чужие фильмы.
+
+  /promo:
     get:
       tags:
-        - films
+        - promo
       summary: Получение промо-фильма.
       description: Получает детальную информацию о промо-фильме.
-
-      parameters:
-        - name: filmIdPromo
-          in: path
-          description: Идентификатор фильма
-          required: true
-          schema:
-            type: number
-            example: '20'
 
       responses:
         '200':
@@ -259,7 +254,7 @@ paths:
         '404':
           description: Фильм не найден
 
-  /comments/{filmId}:
+  /films/{filmId}/comments/:
     post:
       tags:
        - comments
@@ -267,16 +262,22 @@ paths:
       description: Добавляет новый комментарий к определённому фильму. Добавлять комментарии могут только авторизованные клиенты.
 
       parameters:
+        - name: Authorization
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            $ref: '#/components/schemas/token'
         - name: filmId
           in: path
           description: Идентификатор фильма
           required: true
           schema:
             type: number
-            example: '20'
+            example: '63cd6c09fed3a29241644c8f'
 
       requestBody:
-        description: Информация для добавления комментария
+        description: Данные для добавления комментария
         content:
           application/json:
             schema:
@@ -287,15 +288,15 @@ paths:
         '201':
           description: Комментарий успешно добавлен
 
+        '400':
+          description: В данных допущена ошибка, комментарий не добавлен.
+
         '401':
           description: Пользователь не авторизован
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
-
-        '406':
-          description: В данных допущена ошибка, комментарий не добавлен.
 
     get:
       tags:
@@ -310,7 +311,7 @@ paths:
           required: true
           schema:
             type: number
-            example: '20'
+            example: '63cd6c09fed3a29241644c8f'
 
       responses:
         '200':
@@ -323,7 +324,7 @@ paths:
                   $ref: '#/components/schemas/getComments'
 
         '404':
-          description: Комментарии к данному фильму не найдены
+          description: Фильм с данным идентификатором не найден
 
   /users/register:
     post:
@@ -348,6 +349,9 @@ paths:
             schema:
               $ref: '#/components/schemas/user'
 
+        '400':
+          description: Неверные данные.
+
         '409':
           description: Пользователь с таким email уже существует.
 
@@ -358,8 +362,16 @@ paths:
       summary: Авторизация пользователя.
       description: Авторизует пользователя на основе логина и пароля.
 
+      parameters:
+        - name: Authorization
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            $ref: '#/components/schemas/token'
+
       requestBody:
-        description: Информация для авторизации пользователя.
+        description: Данные для авторизации пользователя.
         content:
           application/json:
             schema:
@@ -367,10 +379,10 @@ paths:
         required: true
 
       responses:
-        '202':
+        '200':
           description: Пользователь ввел верные данные для входа в личный кабинет.
 
-        '409':
+        '400':
           description: Пользователь ввел неверные данные для входа в личный кабинет.
 
     get:
@@ -380,7 +392,7 @@ paths:
       description: Возвращает информацию по авторизованному пользователю.
 
       responses:
-        '201':
+        '200':
           description: Объект с информацией о пользователе
           content:
             application/json:
@@ -394,17 +406,129 @@ paths:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
 
-  /users/logout:
-    delete:
+        '404':
+          description: Пользователь не найден
+
+  /users/{userId}/avatar:
+    post:
       tags:
         - users
-      summary: Завершить сеанс пользователя
-      description: Завершает сеанс работы — выход из закрытой части приложения.
+      summary: Загрузить изображение аватара
+      description: Загружает изображение аватара пользователя. Изображение
+        аватара должно быть в формате `png` или `jpg`.
+
+      parameters:
+        - name: Authorization
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            $ref: '#/components/schemas/token'
+        - name: userId
+          in: path
+          description: Идентификатор пользователя
+          required: true
+          schema:
+            type: number
+            example: '63cd6c09fed3a29241644c8f'
+
+      requestBody:
+        description: Изображение пользователя в формате `png` или `jpg`
+        content:
+          image/png | image/jpg:
+            schema:
+                $ref: '#/components/schemas/user/properties/avatarPath'
+        required: true
 
       responses:
-        '202':
-          description: Пользователь вышел из системы
+        '201':
+          description: Изображение успешно изменено
 
+        '401':
+          description: Пользователь не авторизован
+
+        '404':
+          description: Неверный идентификатор пользователя
+
+  /users/{userId}/watchlist:
+    get:
+      tags:
+        - users
+      summary: Загрузить изображение аватара
+      description: Загружает изображение аватара пользователя. Изображение
+        аватара должно быть в формате `png` или `jpg`.
+
+      parameters:
+        - name: Authorization
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            $ref: '#/components/schemas/token'
+        - name: userId
+          in: path
+          description: Идентификатор пользователя
+          required: true
+          schema:
+            type: number
+            example: '63cd6c09fed3a29241644c8f'
+
+      responses:
+        '200':
+          description: Изображение успешно изменено
+
+        '401':
+          description: Пользователь не авторизован
+
+        '404':
+          description: Неверный идентификатор пользователя
+
+  /watchlist:
+    post:
+      tags:
+        - promo
+      summary: Получение промо-фильма.
+      description: Получает детальную информацию о промо-фильме.
+
+      parameters:
+        - name: Authorization
+          in: header
+          description: Авторизационный токен пользователя
+          required: true
+          schema:
+            $ref: '#/components/schemas/token'
+
+      requestBody:
+        description: Идентификатор фильма
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/film/properties/id'
+        required: true
+
+      responses:
+        '200':
+          description: Фильм добавлен «К просмотру», объект фильма.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+
+        '204':
+          description: Фильм удален из списка «К просмотру»
+
+        '400':
+          description: Неверный индентификатор фильма
+
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authErrorMessage'
+
+        '404':
+          description: Фильм не найден
 
 components:
   schemas:
@@ -517,7 +641,6 @@ components:
         password:
           type: string
           example: '12345'
-
 
     user:
       type: object
