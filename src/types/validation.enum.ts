@@ -25,6 +25,10 @@ export const FilmValidationEnum = {
   },
   Rating: {
     IsInt: 'rating must be an integer',
+    Min: {
+      Value: 0,
+      Message: 'Rating cannot be less than 0',
+    },
     Max: {
       Value: 0,
       Message: 'Rating after creation cannot be more than 0',

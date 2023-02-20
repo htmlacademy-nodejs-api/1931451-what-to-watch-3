@@ -14,6 +14,7 @@ export default class CreateFilmDto {
   public description!: string;
 
   @IsInt({message: FilmValidationEnum.Rating.IsInt})
+  @Min(FilmValidationEnum.Rating.Min.Value, {message: FilmValidationEnum.Rating.Min.Message})
   @Max(FilmValidationEnum.Rating.Max.Value, {message: FilmValidationEnum.Rating.Max.Message})
   public rating!: number;
 
