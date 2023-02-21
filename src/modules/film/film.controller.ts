@@ -175,12 +175,15 @@ export default class FilmController extends Controller {
   }
 
   public async delete(
-    {params}: Request<core.ParamsDictionary | ParamsGetFilm>,
+    req: Request<core.ParamsDictionary | ParamsGetFilm>,
     res: Response
   ): Promise<void> {
+    const {params, user} = req;
     const film = await this.filmService.deleteById(params.filmId);
 
     await this.commentService.deleteByFilmId(params.filmId);
+    await this.watchlistService.delete(user.id, params.filmId);
+
     this.noContent(res, film);
   }
 

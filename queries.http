@@ -1,4 +1,5 @@
 @token=eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMEBnbWFpbC5jb20iLCJpZCI6IjYzZjE1YmQxOGYyMWExYTcwOGFlZTYyZCIsImlhdCI6MTY3NjkyOTk5NywiZXhwIjoxNjc3MTAyNzk3fQ.2HRT7JCNvUrrw3Jnizu5tQZLDwtQcpBeykUUvF0xq7s
+@token2=eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QyMjZAZ21haWwuY29tIiwiaWQiOiI2M2YzZWI2ZDI0Y2U2OTYzY2UzN2NlNDMiLCJpYXQiOjE2NzcwMDE5OTgsImV4cCI6MTY3NzE3NDc5OH0.pfXZAneCqfk1_BlhlDSYkHbIfQq-3_LmCwPl4sWKD6k
 
 GET http://localhost:3123/api HTTP/1.1
 
@@ -27,7 +28,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Тестовый фильм - 55",
+  "name": "Тестовый фильм - 57",
   "description": "Классный сериал, мне очень понравился.",
   "rating": 0,
   "genre": "Comedy",
@@ -51,7 +52,7 @@ Authorization: Bearer {{token}}
 
 ### Редактировать карточку с фильмом
 
-PATCH http://localhost:3550/films/63cd6c0afed3a29241644dc6 HTTP/1.1
+PATCH http://localhost:3550/films/63f504823ab0cb66469e6642 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -61,7 +62,7 @@ Authorization: Bearer {{token}}
 
 ### Удалить карточку с фильмом
 
-DELETE http://localhost:3550/films/63ed8916a9208a39a16b827d HTTP/1.1
+DELETE http://localhost:3550/films/63f503933ab0cb66469e6625 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### Получить список комментариев к фильму
@@ -98,7 +99,7 @@ POST http://localhost:3550/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "test20@gmail.com",
+  "email": "test226@gmail.com",
   "password": "123456"
 }
 
@@ -107,19 +108,19 @@ Content-Type: application/json
 GET http://localhost:3550/users/login HTTP/1.1
 Authorization: Bearer {{token}}
 
-### Добавить фильм «К просмотру»
+### Добавить/удалить фильм «К просмотру»
 
 POST http://localhost:3550/watchlist HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "filmId": "63d5a7f2714f41335bf0f35b"
+  "filmId": "63f504823ab0cb66469e6642"
 }
 
 ### Список фильмов «К просмотру»
 
-GET http://localhost:3550/users/63f15bd18f21a1a708aee62d/watchlist HTTP/1.1
+GET http://localhost:3550/users/63f3eb6d24ce6963ce37ce43/watchlist HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### Добавление аватарки от пользователя

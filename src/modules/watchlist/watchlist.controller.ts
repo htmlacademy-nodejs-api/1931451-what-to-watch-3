@@ -52,7 +52,7 @@ export default class WatchlistController extends Controller {
     }
 
     if (await this.watchlistService.findByUserIdAndFilmId(user.id, body.filmId)) {
-      this.noContent(res, this.watchlistService.delete(body.filmId));
+      this.noContent(res, this.watchlistService.delete(user.id, body.filmId));
       return;
     }
 

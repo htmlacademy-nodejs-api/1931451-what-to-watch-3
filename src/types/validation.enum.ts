@@ -5,7 +5,7 @@ export const FilmValidationEnum = {
     IsString: 'name is required',
     MinLength: {
       Value: 5,
-      Message: 'Minimum name length must be 5',
+      Message: 'Minimum name length must be more than 5',
     },
     MaxLength: {
       Value: 100,
@@ -16,7 +16,7 @@ export const FilmValidationEnum = {
     IsString: 'description is required',
     MinLength: {
       Value: 20,
-      Message: 'Minimum description length must be 5',
+      Message: 'Minimum description length must be more than 5',
     },
     MaxLength: {
       Value: 1024,
@@ -63,7 +63,7 @@ export const FilmValidationEnum = {
     IsString: 'director is required',
     MinLength: {
       Value: 2,
-      Message: 'Minimum name director length must be 2',
+      Message: 'Minimum name director length must be more than 2',
     },
     MaxLength: {
       Value: 50,
