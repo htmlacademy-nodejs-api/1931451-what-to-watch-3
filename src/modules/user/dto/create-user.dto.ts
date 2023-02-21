@@ -1,19 +1,15 @@
-import { IsEmail, IsOptional, IsString, Length, Matches, MaxLength } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
+import { UserValidationEnum } from '../../../types/validation.enum.js';
 
 export default class CreateUserDto {
-  @IsString({message: 'username is required'})
-  @Length(1, 15, {message: 'Min length is 1, max is 15'})
+  @IsString({message: UserValidationEnum.Username.IsString})
+  @Length(UserValidationEnum.Username.MinLengthValue, UserValidationEnum.Username.MaxLengthValue, {message: UserValidationEnum.Username.LengthMessage})
   public username!: string;
 
-  @IsEmail({}, {message: 'email must be valid address'})
+  @IsEmail({}, {message: UserValidationEnum.Email.IsEmail})
   public email!: string;
 
-  @IsOptional()
-  @MaxLength(256, {message: 'Too long path for field avatarPath'})
-  @Matches(/^[a-zA-Z0-9-_]*[a-z0-9]\.(jpg|png)$/, {message: 'The format may be“.jpg” or «.png». File naming can only be in Latin letters and numbers and from special characters can only be “_–”'})
-  public avatarPath?: string;
-
-  @IsString({message: 'password is required'})
-  @Length(6, 12, {message: 'Min length is 6, max is 15'})
+  @IsString({message: UserValidationEnum.Password.IsString})
+  @Length(UserValidationEnum.Password.MinLengthValue, UserValidationEnum.Password.MaxLengthValue, {message: UserValidationEnum.Password.LengthMessage})
   public password!: string;
 }

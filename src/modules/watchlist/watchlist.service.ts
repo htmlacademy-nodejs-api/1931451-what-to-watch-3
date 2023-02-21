@@ -13,13 +13,23 @@ export default class WatchlistService implements WatchlistServiceInterface {
 
   public async create(dto: CreateWatchlistDto): Promise<DocumentType<WatchlistEntity>> {
     const watchlist = await this.watchlistModel.create(dto);
-    return watchlist.populate(['userId', 'filmId']);
+    return watchlist.populate({
+      path: 'filmId',
+      populate: {
+        path: 'userId'
+      }
+    });
   }
 
   public async findByUserId(userId: string): Promise<DocumentType<WatchlistEntity>[]> {
     return await this.watchlistModel
       .find({userId})
-      .populate(['userId', 'filmId'])
+      .populate({
+        path: 'filmId',
+        populate: {
+          path: 'userId'
+        }
+      })
       .exec();
   }
 
@@ -30,9 +40,9 @@ export default class WatchlistService implements WatchlistServiceInterface {
       .exec();
   }
 
-  public async delete(filmId: string): Promise<number | null> {
+  public async delete(userId: string, filmId: string): Promise<number | null> {
     const result = await this.watchlistModel
-      .deleteMany({filmId})
+      .deleteMany({userId, filmId})
       .exec();
 
     return result.deletedCount;

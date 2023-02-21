@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as core from 'express-serve-static-core';
 import { StatusCodes } from 'http-status-codes';
 import { inject, injectable } from 'inversify';
+import { ConfigInterface } from '../../common/config/config.interface.js';
 import { Controller } from '../../common/controller/controller.js';
 import HttpError from '../../common/errors/http-error.js';
 import { LoggerInterface } from '../../common/logger/logger.interface.js';
@@ -16,25 +17,33 @@ import { RequestQueryType } from '../../types/request-query.type.js';
 import { fillDTO } from '../../utils/common.js';
 import { CommentServiceInterface } from '../comment/comment-service.interface.js';
 import CommentResponse from '../comment/response/comment.response.js';
+import { WatchlistServiceInterface } from '../watchlist/watchlist-service.interface.js';
 import CreateFilmDto from './dto/create-film.dto.js';
 import UpdateFilmDto from './dto/update-film.dto.js';
 import { FilmServiceInterface } from './film-service.interface.js';
 import FilmListResponse from './response/film-list.response.js';
 import FilmResponse from './response/film.response.js';
+import { FilmEntity } from './film.entity.js';
 
 type ParamsGetFilm = {
   filmId: string;
   genre: string;
 }
 
+interface FilmObjectInterface extends FilmEntity {
+  toObject(): object;
+}
+
 @injectable()
 export default class FilmController extends Controller {
   constructor(
     @inject(Component.LoggerInterface) logger: LoggerInterface,
+    @inject(Component.ConfigInterface) configService: ConfigInterface,
     @inject(Component.FilmServiceInterface) private readonly filmService: FilmServiceInterface,
-    @inject(Component.CommentServiceInterface) private readonly commentService: CommentServiceInterface
+    @inject(Component.CommentServiceInterface) private readonly commentService: CommentServiceInterface,
+    @inject(Component.WatchlistServiceInterface) private readonly watchlistService: WatchlistServiceInterface
   ) {
-    super(logger);
+    super(logger, configService);
 
     this.logger.info('Register routes for FilmController…');
 
@@ -90,6 +99,7 @@ export default class FilmController extends Controller {
       ]
     });
     this.addRoute({path: '/genre/:genre', method: HttpMethodEnum.Get, handler: this.getFilmsFromGenre });
+    this.addRoute({path: '/promo', method: HttpMethodEnum.Get, handler: this.getPromoFilm });
   }
 
   public async show(
@@ -101,19 +111,47 @@ export default class FilmController extends Controller {
   }
 
   public async index(
-    {query}: Request<unknown, unknown, unknown, RequestQueryType>,
+    req: Request<unknown, unknown, unknown, RequestQueryType>,
     res: Response
   ): Promise<void> {
+    const {query} = req;
     const films = await this.filmService.find(query.limit);
-    this.ok(res, fillDTO(FilmListResponse, films));
+
+    this.setWatchlist(req, res, films);
   }
 
   public async getFilmsFromGenre(
-    {params, query}: Request<core.ParamsDictionary | ParamsGetFilm, unknown, unknown, RequestQueryType>,
+    req: Request<core.ParamsDictionary | ParamsGetFilm, unknown, unknown, RequestQueryType>,
     res: Response
   ): Promise<void> {
+    const {params, query} = req;
     const films = await this.filmService.findByGenre(params.genre, query.limit);
-    this.ok(res, fillDTO(FilmListResponse, films));
+
+    this.setWatchlist(req, res, films);
+  }
+
+  private async setWatchlist(
+    {user}: Request<unknown, unknown, unknown, RequestQueryType>,
+    res: Response,
+    films: FilmObjectInterface[]
+  ): Promise<void> {
+
+    if (!user) {
+      const result = films.map((film: FilmObjectInterface) => ({...film, isFavorite: false}));
+      this.ok(res, fillDTO(FilmListResponse, result));
+      return;
+    }
+
+    const userWatchlist = await this.watchlistService.findByUserId(user.id);
+    const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
+
+    const result = films.map((film: FilmObjectInterface) => ({
+      ...film.toObject(),
+      isFavorite: userWatchlistId.includes(film.id),
+      id: film.id,
+    }));
+
+    this.ok(res, fillDTO(FilmListResponse, result));
   }
 
   public async create(
@@ -137,12 +175,15 @@ export default class FilmController extends Controller {
   }
 
   public async delete(
-    {params}: Request<core.ParamsDictionary | ParamsGetFilm>,
+    req: Request<core.ParamsDictionary | ParamsGetFilm>,
     res: Response
   ): Promise<void> {
+    const {params, user} = req;
     const film = await this.filmService.deleteById(params.filmId);
 
     await this.commentService.deleteByFilmId(params.filmId);
+    await this.watchlistService.delete(user.id, params.filmId);
+
     this.noContent(res, film);
   }
 
@@ -162,5 +203,19 @@ export default class FilmController extends Controller {
   ): Promise<void> {
     const comments = await this.commentService.findByFilmId(params.filmId);
     this.ok(res, fillDTO(CommentResponse, comments));
+  }
+
+  public async getPromoFilm(_req: Request, res: Response): Promise<void> {
+    const promoFilm = await this.filmService.findPromoFilm();
+
+    if (!promoFilm) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        'Promo film not found',
+        'FilmController'
+      );
+    }
+
+    this.ok(res, fillDTO(FilmResponse, promoFilm));
   }
 }

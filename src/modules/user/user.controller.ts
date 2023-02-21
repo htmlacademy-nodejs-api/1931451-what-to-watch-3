@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import * as core from 'express-serve-static-core';
 import { StatusCodes } from 'http-status-codes';
@@ -14,7 +13,7 @@ import { ValidateObjectIdMiddleware } from '../../common/middlewares/validate-ob
 import { Component } from '../../types/component.type.js';
 import { HttpMethodEnum } from '../../types/http-method.enum.js';
 import { createJWT, fillDTO } from '../../utils/common.js';
-import WatchlistResponse from '../watchlist/response/watchlist.response.js';
+import FilmListResponse from '../film/response/film-list.response.js';
 import { WatchlistServiceInterface } from '../watchlist/watchlist-service.interface.js';
 import CreateUserDto from './dto/create-user.dto.js';
 import LoginUserDto from './dto/login-user.dto.js';
@@ -31,11 +30,11 @@ type ParamsGetUser = {
 export default class UserController extends Controller {
   constructor(
     @inject(Component.LoggerInterface) logger: LoggerInterface,
+    @inject(Component.ConfigInterface) configService: ConfigInterface,
     @inject(Component.UserServiceInterface) private readonly userService: UserServiceInterface,
-    @inject(Component.ConfigInterface) private readonly configService: ConfigInterface,
     @inject(Component.WatchlistServiceInterface) private readonly watchlistService: WatchlistServiceInterface
   ) {
-    super(logger);
+    super(logger, configService);
     this.logger.info('Register routes for UserController…');
 
     this.addRoute({
@@ -80,8 +79,16 @@ export default class UserController extends Controller {
     req: Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>,
     res: Response
   ): Promise<void> {
-    const { body } = req;
+    const { body, user } = req;
     const existsUser = await this.userService.findByEmail(body.email);
+
+    if (user) {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        'Only anonymous users can create an account.',
+        'UserController'
+      );
+    }
 
     if (existsUser) {
       throw new HttpError(
@@ -153,6 +160,12 @@ export default class UserController extends Controller {
     }
 
     const watchlist = await this.watchlistService.findByUserId(params.userId);
-    this.ok(res, fillDTO(WatchlistResponse, watchlist));
+    const filmList = watchlist.map((film) => ({
+      ...film.toObject().filmId,
+      isFavorite: true,
+      id: film.filmId?.id
+    }));
+
+    this.ok(res, fillDTO(FilmListResponse, filmList));
   }
 }

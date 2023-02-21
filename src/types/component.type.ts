@@ -16,4 +16,5 @@ export const Component = {
   WatchlistServiceInterface: Symbol.for('WatchlistServiceInterface'),
   WatchlistModel: Symbol.for('WatchlistModel'),
   WatchlistController: Symbol.for('WatchlistController'),
+  PromoFilmController: Symbol.for('PromoFilmController'),
 } as const;

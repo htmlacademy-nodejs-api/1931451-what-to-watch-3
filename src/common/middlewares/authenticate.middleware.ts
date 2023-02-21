@@ -24,11 +24,11 @@ export class AuthenticateMiddleware implements MiddlewareInterface {
       return next();
     } catch {
 
-      throw new HttpError(
+      return next(new HttpError(
         StatusCodes.UNAUTHORIZED,
         'Invalid Token',
         'AuthenticateMiddleware'
-      );
+      ));
     }
   }
 }

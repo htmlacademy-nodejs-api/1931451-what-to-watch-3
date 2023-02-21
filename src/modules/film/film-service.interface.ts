@@ -11,6 +11,7 @@ export interface FilmServiceInterface extends DocumentExistsInterface {
   findByNameOrCreate(filmName: string, dto: CreateFilmDto): Promise<DocumentType<FilmEntity>>;
   find(count?: number): Promise<DocumentType<FilmEntity>[]>
   findByGenre(genre: string, count?: number): Promise<DocumentType<FilmEntity>[]>
+  findPromoFilm(): Promise<DocumentType<FilmEntity> | null>;
   updateById(filmId: string, dto: UpdateFilmDto): Promise<DocumentType<FilmEntity> | null>;
   deleteById(filmId: string): Promise<DocumentType<FilmEntity> | null>;
   exists(documentId: string): Promise<boolean>;

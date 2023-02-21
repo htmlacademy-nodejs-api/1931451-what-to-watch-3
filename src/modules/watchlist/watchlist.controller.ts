@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { inject, injectable } from 'inversify';
+import { ConfigInterface } from '../../common/config/config.interface.js';
 import { Controller } from '../../common/controller/controller.js';
 import HttpError from '../../common/errors/http-error.js';
 import { LoggerInterface } from '../../common/logger/logger.interface.js';
@@ -18,10 +19,11 @@ import { WatchlistServiceInterface } from './watchlist-service.interface.js';
 export default class WatchlistController extends Controller {
   constructor(
     @inject(Component.LoggerInterface) logger: LoggerInterface,
+    @inject(Component.ConfigInterface) configService: ConfigInterface,
     @inject(Component.WatchlistServiceInterface) private readonly watchlistService: WatchlistServiceInterface,
     @inject(Component.FilmServiceInterface) private readonly filmService: FilmServiceInterface
   ) {
-    super(logger);
+    super(logger, configService);
 
     this.logger.info('Register routes for WatchlistController…');
     this.addRoute({
@@ -50,7 +52,7 @@ export default class WatchlistController extends Controller {
     }
 
     if (await this.watchlistService.findByUserIdAndFilmId(user.id, body.filmId)) {
-      this.noContent(res, this.watchlistService.delete(body.filmId));
+      this.noContent(res, this.watchlistService.delete(user.id, body.filmId));
       return;
     }
 

@@ -6,11 +6,13 @@ import { FilmServiceInterface } from './film-service.interface.js';
 import FilmController from './film.controller.js';
 import { FilmEntity, FilmModel } from './film.entity.js';
 import FilmService from './film.service.js';
+import PromoFilmController from './promo-film.controller.js';
 
 const filmContainer = new Container();
 
 filmContainer.bind<FilmServiceInterface>(Component.FilmServiceInterface).to(FilmService).inSingletonScope();
 filmContainer.bind<types.ModelType<FilmEntity>>(Component.FilmModel).toConstantValue(FilmModel);
 filmContainer.bind<ControllerInterface>(Component.FilmController).to(FilmController).inSingletonScope();
+filmContainer.bind<ControllerInterface>(Component.PromoFilmController).to(PromoFilmController).inSingletonScope();
 
 export {filmContainer};

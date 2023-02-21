@@ -13,13 +13,15 @@ import { UserModel } from '../modules/user/user.entity.js';
 import DatabaseService from '../common/database-client/database.service.js';
 import { FilmType } from '../types/film.type.js';
 import { getURI } from '../utils/db.js';
+import { ConfigInterface } from '../common/config/config.interface.js';
+import ConfigService from '../common/config/config.service.js';
 
-const DEFAULT_DB_PORT = 27017;
 const DEFAULT_USER_PASSWORD = '12345';
 
 export default class ImportCommand implements CliCommandInterface {
   public readonly name = '--import';
   private logger!: LoggerInterface;
+  private config!: ConfigInterface;
   private filmService!: FilmServiceInterface;
   private userService!: UserServiceInterface;
   private databaseService!: DatabaseInterface;
@@ -30,6 +32,7 @@ export default class ImportCommand implements CliCommandInterface {
     this.onComplete = this.onComplete.bind(this);
 
     this.logger = new ConsoleLoggerService();
+    this.config = new ConfigService(this.logger);
     this.filmService = new FilmService(this.logger, FilmModel);
     this.userService = new UserService(this.logger, UserModel);
     this.databaseService = new DatabaseService(this.logger);
@@ -59,10 +62,10 @@ export default class ImportCommand implements CliCommandInterface {
   }
 
   public async execute(filename: string, login: string, password: string, host: string, dbname: string, salt: string): Promise<void> {
-    const uri = getURI(login, password, host, DEFAULT_DB_PORT, dbname);
+    const uri = getURI(login, password, host, this.config.get('DB_PORT'), dbname);
     this.salt = salt;
 
-    this.databaseService.connect(uri);
+    await this.databaseService.connect(uri);
 
     const fileReader = new TSVFileReader(filename.trim());
     fileReader.on('row', this.onRow);
