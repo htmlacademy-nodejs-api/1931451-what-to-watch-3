@@ -25,12 +25,11 @@ GET http://localhost:3550/films/63cd6c09fed3a29241644c8f HTTP/1.1
 
 POST http://localhost:3550/films HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token2}}
 
 {
-  "name": "Тестовый фильм - 57",
+  "name": "Тестовый фильм - 2",
   "description": "Классный сериал, мне очень понравился.",
-  "rating": 0,
   "genre": "Comedy",
   "released": 1998,
   "runTime": 25,
@@ -46,8 +45,7 @@ Authorization: Bearer {{token}}
   "backgroundImage": "friends-bg.jpg",
   "backgroundColor": "#33a555",
   "previewVideoLink": "friends-trailer.mp4",
-  "videoLink": "friends.mp4",
-  "publishDate": "2023-01-29T17:01:18.745Z"
+  "videoLink": "friends.mp4"
 }
 
 ### Редактировать карточку с фильмом
@@ -77,9 +75,8 @@ Authorization: Bearer {{token}}
 
 {
   "commentText": "Неплохо",
-  "filmId": "63d5a7f2714f41335bf0f35b",
-  "commentRating": 6,
-  "commentDate": "2023-01-29T17:01:18.745Z"
+  "filmId": "63f6441b9d5c543607745fd1",
+  "commentRating": 6
 }
 
 ### Зарегистрировать нового пользователя

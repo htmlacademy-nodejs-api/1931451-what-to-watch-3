@@ -21,7 +21,7 @@ export class CheckUserMiddleware implements MiddlewareInterface {
     }
 
     throw new HttpError(
-      StatusCodes.CONFLICT,
+      StatusCodes.FORBIDDEN,
       `${this.entityName} with ${documentId} not edit`,
       'CheckUserMiddleware'
     );

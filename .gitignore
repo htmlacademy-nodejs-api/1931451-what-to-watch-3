@@ -1,5 +1,7 @@
 .vscode/
 /node_modules/
+/frontend/
+/frontend/node_modules/
 /build/
 /lib/
 /dist/
@@ -11,5 +13,6 @@
 coverage
 *.log
 *.env
+*.http
 /mongodb/
 /uploads/
