@@ -140,6 +140,16 @@ export const UserValidationEnum = {
     MinLengthValue: 6,
     MaxLengthValue: 12,
     LengthMessage: 'Min length is 6, max is 12'
+  },
+  AvatarPath: {
+    MaxLength: {
+      Value: 256,
+      Message: 'Too long path for field avatarPath',
+    },
+    Matches: {
+      Value: /^[a-zA-Z0-9-_]*[a-z0-9]\.(jpg|png)$/,
+      Message: 'The format may be“.jpg” or «.png». File naming can only be in Latin letters and numbers and from special characters can only be “_–”',
+    }
   }
 } as const;
 

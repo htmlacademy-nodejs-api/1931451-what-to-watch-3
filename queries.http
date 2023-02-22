@@ -62,7 +62,7 @@ Authorization: Bearer {{token}}
 
 ### Удалить карточку с фильмом
 
-DELETE http://localhost:3550/films/63f503933ab0cb66469e6625 HTTP/1.1
+DELETE http://localhost:3550/films/63f527860ccf9e5b403aac92 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### Получить список комментариев к фильму
@@ -89,7 +89,7 @@ Content-Type: application/json
 
 {
   "username": "testUser",
-  "email": "test226@gmail.com",
+  "email": "test2@gmail.com",
   "password": "123456"
 }
 
@@ -99,7 +99,7 @@ POST http://localhost:3550/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "test226@gmail.com",
+  "email": "test2@gmail.com",
   "password": "123456"
 }
 
@@ -112,16 +112,16 @@ Authorization: Bearer {{token}}
 
 POST http://localhost:3550/watchlist HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token2}}
 
 {
-  "filmId": "63f504823ab0cb66469e6642"
+  "filmId": "63cd6c09fed3a29241644c8f"
 }
 
 ### Список фильмов «К просмотру»
 
 GET http://localhost:3550/users/63f3eb6d24ce6963ce37ce43/watchlist HTTP/1.1
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token2}}
 
 ### Добавление аватарки от пользователя
 
@@ -130,7 +130,7 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0g
 Authorization: Bearer {{token}}
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="avatar"; filename="snatch.jpg"
+Content-Disposition: form-data; name="avatar"; filename="snatch.jpeg"
 Content-Type: image/jpeg
 
 < /markup/img/snatch.jpg

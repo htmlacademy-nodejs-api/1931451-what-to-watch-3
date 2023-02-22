@@ -5,7 +5,7 @@ import chalk from 'chalk';
 export default class VersionCommand implements CliCommandInterface {
   public readonly name = '--version';
 
-  static readVersion(): string {
+  private static readVersion(): string {
     const contentPageJSON = readFileSync('./package.json', 'utf-8');
     const content = JSON.parse(contentPageJSON);
     return content.version;

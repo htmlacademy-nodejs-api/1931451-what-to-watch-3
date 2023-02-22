@@ -24,7 +24,7 @@ export default class ConfigService implements ConfigInterface {
   }
 
 
-  get<T extends keyof ConfigSchemaType>(key: T): ConfigSchemaType[T]{
+  public get<T extends keyof ConfigSchemaType>(key: T): ConfigSchemaType[T]{
     return this.config[key];
   }
 }

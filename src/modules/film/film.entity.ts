@@ -1,6 +1,7 @@
 import typegoose, { defaultClasses, getModelForClass, Ref} from '@typegoose/typegoose';
 import { UserEntity } from '../user/user.entity.js';
 import { GenreEnum } from '../../types/genre.enum.js';
+import dayjs from 'dayjs';
 
 const {prop, modelOptions} = typegoose;
 
@@ -39,10 +40,10 @@ export class FilmEntity extends defaultClasses.TimeStamps {
   @prop({type: () => String})
   public starring!: string[];
 
-  @prop()
+  @prop({default: ''})
   public posterImage!: string;
 
-  @prop()
+  @prop({default: ''})
   public backgroundImage!: string;
 
   @prop()
@@ -57,7 +58,7 @@ export class FilmEntity extends defaultClasses.TimeStamps {
   @prop({default: 0})
   public commentCount!: number;
 
-  @prop()
+  @prop({default: dayjs().toISOString()})
   public publishDate!: Date;
 
   @prop({
