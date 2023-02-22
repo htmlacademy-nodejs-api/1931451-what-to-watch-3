@@ -1,4 +1,5 @@
 import typegoose, { getModelForClass, Ref, defaultClasses } from '@typegoose/typegoose';
+import dayjs from 'dayjs';
 import { FilmEntity } from '../film/film.entity.js';
 import { UserEntity } from '../user/user.entity.js';
 
@@ -30,7 +31,7 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public commentRating!: number;
 
-  @prop({required: true})
+  @prop({required: true, default: dayjs().toISOString()})
   public commentDate!: Date;
 }
 

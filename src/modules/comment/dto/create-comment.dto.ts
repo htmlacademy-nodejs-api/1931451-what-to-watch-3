@@ -1,4 +1,4 @@
-import { IsDateString, IsInt, IsMongoId, IsString, Length, Max, Min } from 'class-validator';
+import { IsDateString, IsInt, IsMongoId, IsOptional, IsString, Length, Max, Min } from 'class-validator';
 import { CommentValidationEnum } from '../../../types/validation.enum.js';
 
 export default class CreateCommentDto {
@@ -16,6 +16,7 @@ export default class CreateCommentDto {
   @Max(CommentValidationEnum.CommentRating.Max.Value, {message: CommentValidationEnum.CommentRating.Max.Message})
   public commentRating!: number;
 
+  @IsOptional()
   @IsDateString({}, {message: CommentValidationEnum.commentDate.IsDateString})
-  public commentDate!: Date;
+  public commentDate?: Date;
 }

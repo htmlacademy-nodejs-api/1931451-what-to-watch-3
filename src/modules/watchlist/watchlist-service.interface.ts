@@ -6,5 +6,6 @@ export interface WatchlistServiceInterface {
   create(dto: CreateWatchlistDto): Promise<DocumentType<WatchlistEntity>>;
   findByUserId(userId: string): Promise<DocumentType<WatchlistEntity>[]>;
   findByUserIdAndFilmId(userId: string, filmId: string): Promise<DocumentType<WatchlistEntity> | null>
-  delete(userId: string, filmId: string): Promise<number | null>;
+  delete(userId: string, filmId: string): Promise<void | null>;
+  deleteMany(filmId: string): Promise<number | null>;
 }

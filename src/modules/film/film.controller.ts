@@ -1,3 +1,4 @@
+import { DocumentType } from '@typegoose/typegoose';
 import { Request, Response } from 'express';
 import * as core from 'express-serve-static-core';
 import { StatusCodes } from 'http-status-codes';
@@ -21,17 +22,13 @@ import { WatchlistServiceInterface } from '../watchlist/watchlist-service.interf
 import CreateFilmDto from './dto/create-film.dto.js';
 import UpdateFilmDto from './dto/update-film.dto.js';
 import { FilmServiceInterface } from './film-service.interface.js';
+import { FilmEntity } from './film.entity.js';
 import FilmListResponse from './response/film-list.response.js';
 import FilmResponse from './response/film.response.js';
-import { FilmEntity } from './film.entity.js';
 
 type ParamsGetFilm = {
   filmId: string;
   genre: string;
-}
-
-interface FilmObjectInterface extends FilmEntity {
-  toObject(): object;
 }
 
 @injectable()
@@ -133,11 +130,11 @@ export default class FilmController extends Controller {
   private async setWatchlist(
     {user}: Request<unknown, unknown, unknown, RequestQueryType>,
     res: Response,
-    films: FilmObjectInterface[]
+    films: DocumentType<FilmEntity>[]
   ): Promise<void> {
 
     if (!user) {
-      const result = films.map((film: FilmObjectInterface) => ({...film, isFavorite: false}));
+      const result = films.map((film: DocumentType<FilmEntity>) => ({...film, isFavorite: false}));
       this.ok(res, fillDTO(FilmListResponse, result));
       return;
     }
@@ -145,7 +142,7 @@ export default class FilmController extends Controller {
     const userWatchlist = await this.watchlistService.findByUserId(user.id);
     const userWatchlistId = userWatchlist.map((film) => film.filmId?.id);
 
-    const result = films.map((film: FilmObjectInterface) => ({
+    const result = films.map((film: DocumentType<FilmEntity>) => ({
       ...film.toObject(),
       isFavorite: userWatchlistId.includes(film.id),
       id: film.id,
@@ -178,11 +175,11 @@ export default class FilmController extends Controller {
     req: Request<core.ParamsDictionary | ParamsGetFilm>,
     res: Response
   ): Promise<void> {
-    const {params, user} = req;
+    const {params} = req;
     const film = await this.filmService.deleteById(params.filmId);
 
     await this.commentService.deleteByFilmId(params.filmId);
-    await this.watchlistService.delete(user.id, params.filmId);
+    await this.watchlistService.deleteMany(params.filmId);
 
     this.noContent(res, film);
   }

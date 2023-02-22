@@ -194,11 +194,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
 
+        '403':
+          description: Пользователь не может редактировать чужие фильмы.
+
         '404':
           description: Фильм не найден
-
-        '409':
-          description: Пользователь не может редактировать чужие фильмы.
 
     delete:
       tags:
@@ -230,11 +230,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/authErrorMessage'
 
+        '403':
+          description: Пользователь не может удалять чужие фильмы.
+
         '404':
           description: Фильм не найден
-
-        '409':
-          description: Пользователь не может удалять чужие фильмы.
 
   /promo:
     get:

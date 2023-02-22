@@ -18,6 +18,7 @@ import { WatchlistServiceInterface } from '../watchlist/watchlist-service.interf
 import CreateUserDto from './dto/create-user.dto.js';
 import LoginUserDto from './dto/login-user.dto.js';
 import LoggedUserResponse from './response/logged-user.response.js';
+import UploadUserAvatarResponse from './response/upload-user-avatar.response.js';
 import UserResponse from './response/user.response.js';
 import { UserServiceInterface } from './user-service.interface.js';
 import { JWT_ALGORITM } from './user.constant.js';
@@ -123,26 +124,29 @@ export default class UserController extends Controller {
       { email: user.email, id: user.id, }
     );
 
-    this.ok(res, fillDTO(LoggedUserResponse, { email: user.email, token }));
-  }
-
-  public async uploadAvatar(req: Request, res: Response): Promise<void> {
-    this.created(res, {
-      filepath: req.file?.path
+    this.ok(res, {
+      ...fillDTO(LoggedUserResponse, user),
+      token
     });
   }
 
-  public async checkAuthenticate(req: Request, res: Response) {
-    const user = await this.userService.findByEmail(req.user.email);
+  public async uploadAvatar(req: Request, res: Response): Promise<void> {
+    const {userId} = req.params;
+    const uploadFile = {avatarPath: req.file?.filename};
+    await this.userService.updateById(userId, uploadFile);
+    this.created(res, fillDTO(UploadUserAvatarResponse, uploadFile));
+  }
 
-    if (!user) {
+  public async checkAuthenticate(req: Request, res: Response) {
+    if (! req.user) {
       throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `User with id ${req.user.id} not found.`,
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized',
         'UserController'
       );
     }
 
+    const user = await this.userService.findByEmail(req.user.email);
     this.ok(res, fillDTO(LoggedUserResponse, user));
   }
 

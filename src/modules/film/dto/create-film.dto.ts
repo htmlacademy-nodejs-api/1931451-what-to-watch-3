@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsEnum, IsHexColor, IsInt, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, IsHexColor, IsInt, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { GenreEnum } from '../../../types/genre.enum.js';
 import { FilmValidationEnum } from '../../../types/validation.enum.js';
 
@@ -13,10 +13,11 @@ export default class CreateFilmDto {
   @MaxLength(FilmValidationEnum.Description.MaxLength.Value, {message: FilmValidationEnum.Description.MaxLength.Message})
   public description!: string;
 
+  @IsOptional()
   @IsInt({message: FilmValidationEnum.Rating.IsInt})
   @Min(FilmValidationEnum.Rating.Min.Value, {message: FilmValidationEnum.Rating.Min.Message})
   @Max(FilmValidationEnum.Rating.Max.Value, {message: FilmValidationEnum.Rating.Max.Message})
-  public rating!: number;
+  public rating?: number;
 
   @IsEnum(GenreEnum ,{message: FilmValidationEnum.Genre.IsEnum})
   public genre!: GenreEnum;
@@ -62,8 +63,9 @@ export default class CreateFilmDto {
   @Matches(FilmValidationEnum.VideoLink.Matches.Value, {message: FilmValidationEnum.VideoLink.Matches.Message})
   public videoLink!: string;
 
+  @IsOptional()
   @IsDateString({}, {message: FilmValidationEnum.PublishDate.IsDateString})
-  public publishDate!: Date;
+  public publishDate?: Date;
 
   public userId!: string;
 }
