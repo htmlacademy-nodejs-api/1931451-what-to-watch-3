@@ -123,3 +123,11 @@ export const transformObject = (
     target[property] = `${rootPath}/${target[property]}`;
   }));
 };
+
+export const checkImage = (string: string): boolean => {
+  if (string.match(/^[a-zA-Z0-9-_]*[a-z0-9]\.(jpg|png)$/)) {
+    return true;
+  }
+
+  return false;
+};

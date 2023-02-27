@@ -23,6 +23,9 @@ import UserResponse from './response/user.response.js';
 import { UserServiceInterface } from './user-service.interface.js';
 import { JWT_ALGORITM } from './user.constant.js';
 
+const USER_ID = 'userId';
+const AVATAR_FIELD = 'avatarPath';
+
 type ParamsGetUser = {
   userId: string;
 }
@@ -61,8 +64,8 @@ export default class UserController extends Controller {
       handler: this.uploadAvatar,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('userId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar')
+        new ValidateObjectIdMiddleware(USER_ID),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), AVATAR_FIELD)
       ]
     });
     this.addRoute({
@@ -71,7 +74,7 @@ export default class UserController extends Controller {
       handler: this.getUserWatchlist,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('userId'),
+        new ValidateObjectIdMiddleware(USER_ID),
       ]
     });
   }
@@ -133,6 +136,15 @@ export default class UserController extends Controller {
   public async uploadAvatar(req: Request, res: Response): Promise<void> {
     const {userId} = req.params;
     const uploadFile = {avatarPath: req.file?.filename};
+
+    if (userId !== req.user.id) {
+      throw new HttpError(
+        StatusCodes.CONFLICT,
+        'Can\'t change another user\'s avatar',
+        'UserController'
+      );
+    }
+
     await this.userService.updateById(userId, uploadFile);
     this.created(res, fillDTO(UploadUserAvatarResponse, uploadFile));
   }
