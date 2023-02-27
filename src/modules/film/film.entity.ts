@@ -61,6 +61,9 @@ export class FilmEntity extends defaultClasses.TimeStamps {
   @prop({default: dayjs().toISOString()})
   public publishDate!: Date;
 
+  @prop({default: false})
+  public isPromo?: boolean;
+
   @prop({
     ref: () => UserEntity,
     required: true

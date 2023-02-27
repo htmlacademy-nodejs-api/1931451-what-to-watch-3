@@ -36,7 +36,7 @@ export default class ExceptionFilter implements ExceptionFilterInterface {
     );
 
     res
-      .status(StatusCodes.BAD_GATEWAY)
+      .status(StatusCodes.BAD_REQUEST)
       .json(createErrorObject(ServiceErrorEnum.ValidationError, error.message, error.details));
   }
 

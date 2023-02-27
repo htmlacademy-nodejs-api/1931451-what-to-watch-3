@@ -26,6 +26,11 @@ import { FilmEntity } from './film.entity.js';
 import FilmListResponse from './response/film-list.response.js';
 import FilmResponse from './response/film.response.js';
 
+enum FilmControllerData {
+  FILM_ID = 'filmId',
+  FILM_ENTITY = 'film'
+}
+
 type ParamsGetFilm = {
   filmId: string;
   genre: string;
@@ -59,8 +64,8 @@ export default class FilmController extends Controller {
       method: HttpMethodEnum.Get,
       handler: this.show,
       middlewares: [
-        new ValidateObjectIdMiddleware('filmId'),
-        new DocumentExistsMiddleware(this.filmService, 'Film', 'filmId')
+        new ValidateObjectIdMiddleware(FilmControllerData.FILM_ID),
+        new DocumentExistsMiddleware(this.filmService, FilmControllerData.FILM_ENTITY, FilmControllerData.FILM_ID)
       ]
     });
     this.addRoute({
@@ -69,10 +74,10 @@ export default class FilmController extends Controller {
       handler: this.update,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('filmId'),
-        new CheckUserMiddleware(this.filmService, 'Film', 'filmId'),
+        new ValidateObjectIdMiddleware(FilmControllerData.FILM_ID),
+        new CheckUserMiddleware(this.filmService, FilmControllerData.FILM_ENTITY, FilmControllerData.FILM_ID),
         new ValidateDtoMiddleware(UpdateFilmDto),
-        new DocumentExistsMiddleware(this.filmService, 'Film', 'filmId')
+        new DocumentExistsMiddleware(this.filmService, FilmControllerData.FILM_ENTITY, FilmControllerData.FILM_ID)
       ]
     });
     this.addRoute({
@@ -81,9 +86,9 @@ export default class FilmController extends Controller {
       handler: this.delete,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('filmId'),
-        new CheckUserMiddleware(this.filmService, 'Film', 'filmId'),
-        new DocumentExistsMiddleware(this.filmService, 'Film', 'filmId')
+        new ValidateObjectIdMiddleware(FilmControllerData.FILM_ID),
+        new CheckUserMiddleware(this.filmService, FilmControllerData.FILM_ENTITY, FilmControllerData.FILM_ID),
+        new DocumentExistsMiddleware(this.filmService, FilmControllerData.FILM_ENTITY, FilmControllerData.FILM_ID)
       ]
     });
     this.addRoute({
@@ -91,8 +96,8 @@ export default class FilmController extends Controller {
       method: HttpMethodEnum.Get,
       handler: this.getComments,
       middlewares: [
-        new ValidateObjectIdMiddleware('filmId'),
-        new DocumentExistsMiddleware(this.filmService, 'Film', 'filmId')
+        new ValidateObjectIdMiddleware(FilmControllerData.FILM_ID),
+        new DocumentExistsMiddleware(this.filmService, FilmControllerData.FILM_ENTITY, FilmControllerData.FILM_ID)
       ]
     });
     this.addRoute({path: '/genre/:genre', method: HttpMethodEnum.Get, handler: this.getFilmsFromGenre });
